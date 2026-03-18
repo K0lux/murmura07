@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=murmura
+      - POSTGRES_PASSWORD=murmura
+      - POSTGRES_DB=api_gateway_test
+    ports:
+      - "5433:5432"
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"

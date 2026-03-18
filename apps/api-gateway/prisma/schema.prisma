@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  passwordSalt  String
+  createdAt     DateTime       @default(now())
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model DigitalTwinSession {
+  id             String   @id @default(cuid())
+  userId         String
+  contactId      String
+  sessionId      String
+  createdAt      DateTime @default(now())
+  lastActivityAt DateTime @default(now())
+}
+
+model InternalThread {
+  id             String   @id @default(cuid())
+  participant1Id String
+  participant2Id String
+  createdAt      DateTime @default(now())
+  lastMessageAt  DateTime?
+
+  @@unique([participant1Id, participant2Id])
+}
+
+model InternalMessage {
+  id               String   @id @default(cuid())
+  threadId         String
+  senderId         String
+  content          String?
+  contentEncrypted String
+  clientMessageId  String?
+  replyToId        String?
+  deliveredAt      DateTime?
+  readAt           DateTime?
+  createdAt        DateTime @default(now())
+
+  @@index([threadId, senderId, createdAt])
+}
+
+model InternalMessageReaction {
+  id        String   @id @default(cuid())
+  messageId String
+  userId    String
+  emoji     String
+  createdAt DateTime @default(now())
+
+  @@unique([messageId, userId, emoji])
+}
+
+model UserPublicKey {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  publicKey String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SlashCommandUsage {
+  id              String   @id @default(cuid())
+  userId          String
+  command         String
+  executionTimeMs Int
+  success         Boolean
+  createdAt       DateTime @default(now())
+}

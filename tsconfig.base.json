@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@murmura/shared-types": ["packages/shared-types/src"],
+      "@murmura/cognitive-core-shared": ["packages/cognitive-core/shared/src"],
+      "@murmura/cognitive-core-ingestion": ["packages/cognitive-core/ingestion/src"],
+      "@murmura/cognitive-core-memory": ["packages/cognitive-core/memory/src"],
+      "@murmura/cognitive-core-context-engine": ["packages/cognitive-core/context-engine/src"],
+      "@murmura/cognitive-core-governance": ["packages/cognitive-core/governance/src"],
+      "@murmura/cognitive-core-decision-engine": ["packages/cognitive-core/decision-engine/src"],
+      "@murmura/cognitive-core-api": ["packages/cognitive-core/api/src"]
+    }
+  }
+}

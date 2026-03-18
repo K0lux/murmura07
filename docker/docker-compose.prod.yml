@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  api-gateway:
+    image: murmura-api-gateway:prod
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api-gateway
+    ports:
+      - "3000:3000"
+  web:
+    image: murmura-web:prod
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.web
+    ports:
+      - "80:80"
+  openclaw-service:
+    image: murmura-openclaw:prod
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.openclaw-service
+    ports:
+      - "3001:3001"

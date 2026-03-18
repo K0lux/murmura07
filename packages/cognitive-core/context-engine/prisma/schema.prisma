@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Exchange {
+  id              String   @id @default(cuid())
+  userId          String
+  interlocuteurId String
+  threadId        String
+  canal           String
+  inbound         String
+  outbound        String?
+  analysisJson    Json?
+  decisionJson    Json?
+  createdAt       DateTime @default(now())
+}

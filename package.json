@@ -1,0 +1,38 @@
+{
+  "name": "murmura",
+  "private": true,
+  "packageManager": "pnpm@9.12.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "packages/cognitive-core/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:all": "vitest run --workspace vitest.workspace.ts",
+    "test:e2e": "turbo run test:e2e",
+    "test:integration": "RUN_INTEGRATION=1 vitest run --workspace vitest.workspace.ts",
+    "mutation": "stryker run",
+    "seed": "tsx scripts/seed.ts",
+    "format": "prettier -w .",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^9.6.0",
+    "@stryker-mutator/typescript-checker": "^9.6.0",
+    "@types/node": "^20.11.30",
+    "eslint": "^9.0.0",
+    "fast-check": "^4.6.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.5",
+    "testcontainers": "^11.12.0",
+    "tsx": "^4.21.0",
+    "turbo": "^2.0.12",
+    "typescript": "^5.5.0"
+  }
+}
