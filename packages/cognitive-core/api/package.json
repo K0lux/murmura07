@@ -11,6 +11,7 @@
     "@murmura/cognitive-core-decision-engine": "workspace:*",
     "@murmura/cognitive-core-governance": "workspace:*",
     "@murmura/cognitive-core-memory": "workspace:*",
+    "fastify-plugin": "^5.0.1",
     "@murmura/cognitive-core-shared": "workspace:*",
     "fastify": "^4.28.1",
     "@fastify/helmet": "^11.1.0",

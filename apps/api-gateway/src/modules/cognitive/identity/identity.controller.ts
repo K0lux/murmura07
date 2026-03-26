@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Patch, Req, UsePipes } from '@nestjs/common';
 import { z } from 'zod';
+import type { IdentityModel } from '@murmura/cognitive-core-shared';
 import { CognitiveService } from '../cognitive.service.js';
 import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe.js';
 
@@ -32,7 +33,7 @@ export class IdentityController {
     @Body() body: z.infer<typeof UpdateIdentitySchema>
   ) {
     const userId = req.user?.userId ?? 'anonymous';
-    return this.cognitiveService.updateIdentity(userId, body);
+    return this.cognitiveService.updateIdentity(userId, body as unknown as Partial<IdentityModel>);
   }
 }
 

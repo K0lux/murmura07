@@ -1,10 +1,10 @@
 import fastify from 'fastify';
 import helmet from '@fastify/helmet';
 import cors from '@fastify/cors';
-import swagger from '@fastify/swagger';
-import swaggerUi from '@fastify/swagger-ui';
 import { authPlugin } from './plugins/auth.plugin.js';
+import { opentelemetryPlugin } from './plugins/opentelemetry.plugin.js';
 import { rateLimitPlugin } from './plugins/rate-limit.plugin.js';
+import { swaggerPlugin } from './plugins/swagger.plugin.js';
 import { validationPlugin } from './plugins/validation.plugin.js';
 import { analyzeRoute } from './routes/analyze.route.js';
 import { memoryRoute } from './routes/memory.route.js';
@@ -17,12 +17,12 @@ import { requestIdMiddleware } from './middleware/request.id.middleware.js';
 import { performanceMiddleware } from './middleware/performance.middleware.js';
 
 export function buildServer() {
-  const app = fastify({ logger: true });
+  const app = fastify({ logger: process.env.NODE_ENV !== 'test' });
 
   app.register(helmet);
   app.register(cors, { origin: true });
-  app.register(swagger, { openapi: { info: { title: 'Murmura API', version: '0.1' } } });
-  app.register(swaggerUi, { routePrefix: '/docs' });
+  app.register(opentelemetryPlugin);
+  app.register(swaggerPlugin);
 
   app.addHook('onRequest', requestIdMiddleware);
   app.addHook('onRequest', performanceMiddleware);

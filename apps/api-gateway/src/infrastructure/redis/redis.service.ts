@@ -1,12 +1,12 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
-import Redis from 'ioredis';
+import { Redis, type Redis as RedisClient } from 'ioredis';
 
 @Injectable()
 export class RedisService implements OnModuleDestroy {
-  private readonly client: Redis;
+  private readonly client: RedisClient;
 
   constructor() {
-    const url = process.env.REDIS_URL ?? 'redis://localhost:6379';
+    const url = process.env['REDIS_URL'] ?? 'redis://localhost:6379';
     this.client = new Redis(url, {
       maxRetriesPerRequest: 2
     });
@@ -36,6 +36,14 @@ export class RedisService implements OnModuleDestroy {
     if (ttlSeconds > 0) {
       await this.client.expire(key, ttlSeconds);
     }
+  }
+
+  async ttl(key: string) {
+    return this.client.ttl(key);
+  }
+
+  async ping() {
+    return this.client.ping();
   }
 
   async del(key: string) {

@@ -8,12 +8,14 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  email         String         @unique
-  passwordHash  String
-  passwordSalt  String
-  createdAt     DateTime       @default(now())
-  refreshTokens RefreshToken[]
+  id              String         @id @default(cuid())
+  email           String         @unique
+  phoneNumber     String?        @unique
+  phoneVerifiedAt DateTime?
+  passwordHash    String
+  passwordSalt    String
+  createdAt       DateTime       @default(now())
+  refreshTokens   RefreshToken[]
 }
 
 model RefreshToken {

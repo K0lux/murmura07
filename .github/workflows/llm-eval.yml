@@ -20,3 +20,9 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Run eval
         run: pnpm -w exec tsx scripts/eval.ts
+      - name: Upload eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: llm-eval-report
+          path: reports

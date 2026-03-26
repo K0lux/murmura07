@@ -1,13 +1,13 @@
+import { DecisionOrchestrationAgent } from '@murmura/cognitive-core-decision-engine';
+import { IngestionPipeline } from '@murmura/cognitive-core-ingestion';
+import { CanalSchema, MurmuraResponseSchema } from '@murmura/cognitive-core-shared';
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { IngestionPipeline } from '@murmura/cognitive-core-ingestion';
-import { DecisionOrchestrationAgent } from '@murmura/cognitive-core-decision-engine';
-import { MurmuraResponseSchema } from '@murmura/cognitive-core-shared';
 import { PipelineOrchestrator } from '../orchestrator/pipeline.orchestrator.js';
 
 const AnalyzeSchema = z.object({
   content: z.string().min(1),
-  canal: z.string().min(1),
+  canal: CanalSchema,
   interlocuteurId: z.string().min(1)
 });
 
@@ -16,7 +16,7 @@ export async function analyzeRoute(app: FastifyInstance) {
   const orchestrator = new PipelineOrchestrator(new DecisionOrchestrationAgent());
 
   app.post('/', async (request) => {
-    const body = (app as any).validateBody(AnalyzeSchema, request.body);
+    const body = app.validateBody(AnalyzeSchema, request.body);
     const userId = request.user?.userId ?? 'anonymous';
     const requestId = request.headers['x-request-id'] ?? `req_${Date.now()}`;
 
@@ -59,4 +59,3 @@ export async function analyzeRoute(app: FastifyInstance) {
     return MurmuraResponseSchema.parse(response);
   });
 }
-

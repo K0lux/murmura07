@@ -1,0 +1,43 @@
+{
+  "startedAt": "2026-03-18T21:50:55.261Z",
+  "totals": {
+    "messages": 1,
+    "scenarios": 1
+  },
+  "thresholds": {
+    "intentionAccuracy": 0.8,
+    "averageScoreError": 0.2,
+    "styleRespectRate": 0.85
+  },
+  "metrics": {
+    "intentionAccuracy": 1,
+    "averageScoreError": 0,
+    "styleRespectRate": 1
+  },
+  "checks": {
+    "intentionAccuracy": true,
+    "averageScoreError": true,
+    "styleRespectRate": true
+  },
+  "status": "passed",
+  "samples": {
+    "messages": [
+      {
+        "input": "Peux-tu me confirmer la r�union de demain ?",
+        "expectedIntention": "request_info",
+        "predictedIntention": "request_info",
+        "expectedTensionScore": 0.2,
+        "predictedTensionScore": 0.2
+      }
+    ],
+    "scenarios": [
+      {
+        "input": "On doit revoir le contrat.",
+        "expectedStyleCompliant": true,
+        "predictedStyleCompliant": true,
+        "expectedDecision": "respond_diplomatic",
+        "predictedDecision": "respond_diplomatic"
+      }
+    ]
+  }
+}

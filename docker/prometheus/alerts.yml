@@ -1,0 +1,29 @@
+groups:
+  - name: murmura-critical
+    rules:
+      - alert: PostgresExporterUnavailable
+        expr: up{job="postgres-exporter"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Exporter PostgreSQL indisponible
+          description: L'exporter PostgreSQL n'est plus scrape par Prometheus.
+
+      - alert: RedisExporterUnavailable
+        expr: up{job="redis-exporter"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Exporter Redis indisponible
+          description: L'exporter Redis n'est plus scrape par Prometheus.
+
+      - alert: HighProcessMemory
+        expr: process_resident_memory_bytes{job="api-gateway"} > 4e+08
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Memoire API Gateway elevee
+          description: L'API Gateway depasse 400 Mo de memoire residente depuis plus de 5 minutes.

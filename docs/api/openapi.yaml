@@ -1,0 +1,168 @@
+openapi: 3.0.3
+info:
+  title: Murmura Cognitive API
+  version: 0.1.0
+  description: |
+    Reference OpenAPI snapshot for the Cognitive Core HTTP surface.
+
+    Source of truth today:
+    - Fastify plugin in `packages/cognitive-core/api/src/plugins/swagger.plugin.ts`
+    - runtime JSON at `/openapi.json` when the Cognitive Core API is running
+
+    Note:
+    This file is a checked-in snapshot for documentation purposes. The repository
+    does not currently contain an automatic NestJS Swagger generation pipeline for
+    `apps/api-gateway`.
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: analyze
+  - name: relationships
+  - name: health
+paths:
+  /v1/analyze:
+    post:
+      tags: [analyze]
+      summary: Analyze an incoming message and return a recommendation
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyzeRequest'
+      responses:
+        '200':
+          description: Analysis result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeResponse'
+  /v1/relationships:
+    get:
+      tags: [relationships]
+      summary: List known relationships for the current user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+        - in: query
+          name: sort
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Relationship collection
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                required: [items]
+  /v1/health:
+    get:
+      tags: [health]
+      summary: Health probe
+      responses:
+        '200':
+          description: Service health
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                required: [status]
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AnalyzeRequest:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+        canal:
+          type: string
+          enum: [telegram, whatsapp, sms, email, slack, api, internal]
+        interlocuteurId:
+          type: string
+          minLength: 1
+      required:
+        - content
+        - canal
+        - interlocuteurId
+    MessageAnalysis:
+      type: object
+      additionalProperties: true
+      description: Detailed schema is defined by the shared Zod contracts at runtime.
+    Recommendation:
+      type: object
+      properties:
+        strategy:
+          type: string
+        rationale:
+          type: string
+        confidence:
+          type: number
+        suggestedReply:
+          type: string
+          nullable: true
+      required:
+        - strategy
+        - rationale
+        - confidence
+    Alert:
+      type: object
+      properties:
+        type:
+          type: string
+        severity:
+          type: string
+        message:
+          type: string
+        triggeredBy:
+          type: string
+      required:
+        - type
+        - severity
+        - message
+    AnalyzeResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+        analysis:
+          $ref: '#/components/schemas/MessageAnalysis'
+        recommendation:
+          $ref: '#/components/schemas/Recommendation'
+        simulations:
+          type: array
+          items:
+            type: object
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alert'
+        autonomyAllowed:
+          type: boolean
+      required:
+        - requestId
+        - analysis
+        - recommendation
+        - simulations
+        - alerts
+        - autonomyAllowed

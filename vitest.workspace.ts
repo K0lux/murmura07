@@ -1,6 +1,7 @@
 import { defineWorkspace } from 'vitest/config';
 
 export default defineWorkspace([
+  'packages/cognitive-core/api',
   'packages/cognitive-core/shared',
   'packages/cognitive-core/ingestion',
   'packages/cognitive-core/memory',

@@ -1,0 +1,25 @@
+FROM node:20-bullseye-slim
+
+ENV PNPM_HOME=/pnpm
+ENV PATH=${PNPM_HOME}:${PATH}
+ENV HUSKY=0
+ENV PORT=3001
+
+WORKDIR /workspace
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates python3 make g++ \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN corepack enable
+
+COPY . .
+
+RUN pnpm install --frozen-lockfile
+RUN pnpm --filter @murmura/murmuraclaw build
+
+EXPOSE 3001
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=20 CMD node -e "fetch('http://127.0.0.1:3001/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+
+CMD ["node", "apps/murmuraclaw/dist/main.js"]

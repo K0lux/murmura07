@@ -41,7 +41,7 @@ export class CognitiveService {
 
     const recommendation: Recommendation = {
       strategy: analysis.tensionScore > 0.6 ? 'respond_diplomatic' : 'respond_direct',
-      rationale: analysis.tensionScore > 0.6 ? 'PrÈserver la relation sous tension.' : 'RÈponse directe suffisante.',
+      rationale: analysis.tensionScore > 0.6 ? 'Pr√©server la relation sous tension.' : 'R√©ponse directe suffisante.',
       confidence: 0.6
     };
 
@@ -50,7 +50,7 @@ export class CognitiveService {
       alerts.push({
         type: 'high_tension',
         severity: 'warning',
-        message: 'Tension ÈlevÈe dÈtectÈe.',
+        message: 'Tension √©lev√©e d√©tect√©e.',
         triggeredBy: 'tensionScore'
       });
     }
@@ -86,10 +86,14 @@ export class CognitiveService {
     options: { limit?: number; sources?: string[] }
   ) {
     this.ensureIndexing(userId);
-    return this.memorySearch.search(userId, query, {
-      limit: options.limit,
-      sources: options.sources as Array<'memory' | 'session'> | undefined
-    });
+    const searchOptions: { limit?: number; sources?: Array<'memory' | 'session'> } = {};
+    if (options.limit !== undefined) {
+      searchOptions.limit = options.limit;
+    }
+    if (options.sources !== undefined) {
+      searchOptions.sources = options.sources as Array<'memory' | 'session'>;
+    }
+    return this.memorySearch.search(userId, query, searchOptions);
   }
 
   async getMemoryFile(userId: string, relativePath: string, startLine = 1, numLines = 20) {

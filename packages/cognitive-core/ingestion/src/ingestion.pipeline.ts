@@ -3,7 +3,9 @@ import {
   MessageAnalysisSchema,
   RawMessage,
   Intention,
-  UrgencyLevel
+  UrgencyLevel,
+  EmotionProfile,
+  PowerAsymmetry
 } from '@murmura/cognitive-core-shared';
 import { IntentionAnalyzer } from './analyzers/intention.analyzer.js';
 import { EmotionAnalyzer } from './analyzers/emotion.analyzer.js';
@@ -37,7 +39,11 @@ export class IngestionPipeline {
     return MessageAnalysisSchema.parse(analysis);
   }
 
-  private async safeIntention(content: string): Promise<{ intention: Intention; urgencyLevel: UrgencyLevel; ambiguityScore: number }> {
+  private async safeIntention(content: string): Promise<{
+    intention: Intention;
+    urgencyLevel: UrgencyLevel;
+    ambiguityScore: number;
+  }> {
     try {
       const result = await this.intentionAnalyzer.analyze(content);
       return {
@@ -50,7 +56,14 @@ export class IngestionPipeline {
     }
   }
 
-  private async safeEmotion(content: string) {
+  private async safeEmotion(
+    content: string
+  ): Promise<{
+    emotion: EmotionProfile;
+    tensionScore: number;
+    ambiguityScore: number;
+    powerAsymmetry: PowerAsymmetry;
+  }> {
     try {
       return await this.emotionAnalyzer.analyze(content);
     } catch {
@@ -67,7 +80,7 @@ export class IngestionPipeline {
     try {
       return await this.demandsExtractor.extract(content);
     } catch {
-      return { explicitDemand: 'Demande implicite à clarifier' };
+      return { explicitDemand: 'Demande implicite Ã  clarifier' };
     }
   }
 }

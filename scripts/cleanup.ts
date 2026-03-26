@@ -6,15 +6,25 @@ async function safeRm(target: string) {
 }
 
 async function main() {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env['NODE_ENV'] === 'production') {
     throw new Error('Cleanup is blocked in production.');
   }
 
-  const workspaceRoot = path.resolve('workspace-template');
   const reports = path.resolve('reports');
+  const localState = path.resolve('.murmura');
+  const temporaryWorkspaceRoots = [
+    path.join(localState, 'workspaces'),
+    path.join(localState, 'eval-workspaces'),
+    path.join(localState, 'memory')
+  ];
+  const legacyWorkspaceRoots = [
+    path.resolve('workspace-template', 'user_test'),
+    path.resolve('workspace-template', 'dev-seed-workspaces')
+  ];
 
   await safeRm(reports);
-  await fs.mkdir(workspaceRoot, { recursive: true });
+  await Promise.all([...temporaryWorkspaceRoots, ...legacyWorkspaceRoots].map((target) => safeRm(target)));
+  await fs.mkdir(localState, { recursive: true });
 
   console.log('Cleanup done.');
 }

@@ -6,7 +6,7 @@ export class OpenAIProvider implements EmbeddingProvider {
   dimensions = 1536;
 
   isAvailable() {
-    return Boolean(process.env.OPENAI_API_KEY);
+    return Boolean(process.env['OPENAI_API_KEY']);
   }
 
   async embed(text: string) {

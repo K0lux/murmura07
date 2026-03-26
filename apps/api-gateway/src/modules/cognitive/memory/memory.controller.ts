@@ -27,10 +27,14 @@ export class MemoryController {
   ) {
     const userId = req.user?.userId ?? 'anonymous';
     const sources = query.sources ? query.sources.split(',').map((s) => s.trim()) : undefined;
-    return this.cognitiveService.searchMemory(userId, query.query, {
-      limit: query.limit,
-      sources
-    });
+    const options: { limit?: number; sources?: string[] } = {};
+    if (query.limit !== undefined) {
+      options.limit = query.limit;
+    }
+    if (sources !== undefined) {
+      options.sources = sources;
+    }
+    return this.cognitiveService.searchMemory(userId, query.query, options);
   }
 
   @Get('get')

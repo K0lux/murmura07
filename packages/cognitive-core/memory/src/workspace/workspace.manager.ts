@@ -26,12 +26,12 @@ const resolveTemplateDir = () => {
 
 export class WorkspaceManager {
   constructor(
-    private readonly baseDir = process.env.MURMURA_WORKSPACE_DIR,
+    private readonly baseDir = process.env['MURMURA_WORKSPACE_DIR'],
     private readonly templateDir = resolveTemplateDir()
   ) {}
 
   resolveWorkspace(userId: string): string {
-    const root = this.baseDir ?? path.join(process.env.HOME ?? '.', '.murmura', 'workspace');
+    const root = this.baseDir ?? path.join(process.env['HOME'] ?? '.', '.murmura', 'workspace');
     return path.join(root, userId);
   }
 

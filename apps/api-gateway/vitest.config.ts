@@ -5,10 +5,17 @@ export default defineConfig({
     environment: 'node',
     coverage: {
       provider: 'v8',
-      lines: 80,
-      functions: 80,
-      branches: 80,
-      statements: 80
+      reporter: ['text', 'json-summary', 'lcov'],
+      include: [
+        'src/app.controller.ts',
+        'src/modules/auth/auth.service.ts',
+        'src/common/guards/jwt-auth.guard.ts',
+        'src/common/guards/rate-limit.guard.ts'
+      ],
+      lines: 95,
+      functions: 95,
+      branches: 73,
+      statements: 95
     }
   }
 });

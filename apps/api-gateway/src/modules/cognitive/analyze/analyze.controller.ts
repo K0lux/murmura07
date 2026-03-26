@@ -1,5 +1,6 @@
 import { Body, Controller, Post, Req, UsePipes } from '@nestjs/common';
 import { z } from 'zod';
+import type { RawMessage } from '@murmura/cognitive-core-shared';
 import { CognitiveService } from '../cognitive.service.js';
 import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe.js';
 
@@ -23,10 +24,11 @@ export class AnalyzeController {
   ) {
     const requestId = req.headers['x-request-id'] ?? `req_${Date.now()}`;
     const userId = req.user?.userId ?? 'anonymous';
+    const canal = body.canal as RawMessage['canal'];
 
     return this.cognitiveService.analyze(requestId, {
       userId,
-      canal: body.canal,
+      canal,
       interlocuteurId: body.interlocuteurId,
       content: body.content,
       metadata: {

@@ -16,7 +16,10 @@ describe('MemorySearchEngine', () => {
     const templateDir = await makeTempDir();
 
     await fs.writeFile(path.join(templateDir, 'MEMORY.md'), 'Project Alpha discussion');
+    await fs.writeFile(path.join(templateDir, 'CONTEXT.md'), 'Current priorities include Project Alpha.');
     await fs.mkdir(path.join(templateDir, 'memory'), { recursive: true });
+    await fs.mkdir(path.join(templateDir, 'relationships'), { recursive: true });
+    await fs.mkdir(path.join(templateDir, 'sessions', 'indexed'), { recursive: true });
 
     const workspaceManager = new WorkspaceManager(tempRoot, templateDir);
     await workspaceManager.initWorkspace('user1');

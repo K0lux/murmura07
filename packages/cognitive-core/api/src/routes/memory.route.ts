@@ -10,7 +10,7 @@ export async function memoryRoute(app: FastifyInstance) {
   const engine = new MemorySearchEngine();
 
   app.get('/search', async (request) => {
-    const query = (app as any).validateBody(SearchSchema, request.query);
+    const query = app.validateQuery(SearchSchema, request.query);
     const userId = request.user?.userId ?? 'anonymous';
     return engine.search(userId, query.query);
   });

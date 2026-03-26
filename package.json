@@ -12,12 +12,17 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "test": "turbo run test",
-    "test:all": "vitest run --workspace vitest.workspace.ts",
+    "test": "pnpm -w exec tsx scripts/run-vitest-workspace.ts",
+    "test:all": "pnpm -w exec tsx scripts/run-vitest-workspace.ts",
+    "test:coverage": "pnpm -w exec tsx scripts/run-vitest-workspace.ts --coverage",
     "test:e2e": "turbo run test:e2e",
-    "test:integration": "RUN_INTEGRATION=1 vitest run --workspace vitest.workspace.ts",
-    "mutation": "stryker run",
+    "test:integration": "cross-env RUN_INTEGRATION=1 pnpm -w exec tsx scripts/run-vitest-workspace.ts",
+    "mutation": "pnpm exec stryker run",
+    "migrate": "tsx scripts/migrate.ts",
     "seed": "tsx scripts/seed.ts",
+    "eval": "tsx scripts/eval.ts",
+    "generate-types": "tsx scripts/generate-types.ts",
+    "cleanup": "tsx scripts/cleanup.ts",
     "format": "prettier -w .",
     "prepare": "husky"
   },
@@ -25,6 +30,8 @@
     "@stryker-mutator/core": "^9.6.0",
     "@stryker-mutator/typescript-checker": "^9.6.0",
     "@types/node": "^20.11.30",
+    "@vitest/coverage-v8": "^2.1.9",
+    "cross-env": "^7.0.3",
     "eslint": "^9.0.0",
     "fast-check": "^4.6.0",
     "husky": "^9.0.11",
@@ -33,6 +40,7 @@
     "testcontainers": "^11.12.0",
     "tsx": "^4.21.0",
     "turbo": "^2.0.12",
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "vitest": "^2.1.9"
   }
 }

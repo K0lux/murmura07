@@ -23,7 +23,14 @@ export class RelationshipsController {
     @Query() query: z.infer<typeof RelationshipQuerySchema>
   ) {
     const userId = req.user?.userId ?? 'anonymous';
-    return this.cognitiveService.getRelationships(userId, query);
+    const filters: { type?: string; sort?: string } = {};
+    if (query.type !== undefined) {
+      filters.type = query.type;
+    }
+    if (query.sort !== undefined) {
+      filters.sort = query.sort;
+    }
+    return this.cognitiveService.getRelationships(userId, filters);
   }
 
   @Get(':interlocuteurId')

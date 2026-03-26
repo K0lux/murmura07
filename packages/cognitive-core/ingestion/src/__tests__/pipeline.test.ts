@@ -1,19 +1,19 @@
-import { describe, expect, it } from 'vitest';
+ï»¿import { describe, expect, it } from 'vitest';
 import { IngestionPipeline } from '../ingestion.pipeline.js';
 
 const pipeline = new IngestionPipeline();
 
 describe('IngestionPipeline', () => {
-  it('classifies question as information', async () => {
+  it('classifies polite question as request', async () => {
     const result = await pipeline.process({
       userId: 'u1',
       canal: 'email',
       interlocuteurId: 'i1',
-      content: 'Peux-tu me dire si le fichier est prêt ?',
+      content: 'Peux-tu me dire si le fichier est pret ?',
       metadata: { timestamp: new Date(), urgencyFlag: false }
     });
 
-    expect(result.intention).toBe('information');
+    expect(result.intention).toBe('request');
   });
 
   it('detects urgency cues', async () => {
@@ -21,7 +21,7 @@ describe('IngestionPipeline', () => {
       userId: 'u1',
       canal: 'email',
       interlocuteurId: 'i1',
-      content: 'URGENT: merci de répondre ASAP',
+      content: 'URGENT: merci de repondre ASAP',
       metadata: { timestamp: new Date(), urgencyFlag: false }
     });
 
@@ -41,4 +41,3 @@ describe('IngestionPipeline', () => {
     expect(result.tensionScore).toBeLessThanOrEqual(1);
   });
 });
-

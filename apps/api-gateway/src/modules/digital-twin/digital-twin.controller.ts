@@ -1,29 +1,41 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
+import { DigitalTwinService } from './digital-twin.service.js';
+import { CreateTwinSessionDto } from './dto/create-twin-session.dto.js';
+import { TwinMessageDto } from './dto/twin-message.dto.js';
 
 @Controller('v1/twin')
 export class DigitalTwinController {
+  constructor(private readonly digitalTwinService: DigitalTwinService) {}
+
   @Post('session')
-  createSession(@Body() body: { contactId: string }) {
-    return { sessionId: 'stub', relationshipContext: {} };
+  createSession(
+    @Req() req: { user?: { userId: string } },
+    @Body() body: CreateTwinSessionDto
+  ) {
+    return this.digitalTwinService.createSession(req.user?.userId ?? 'anonymous', body.contactId);
   }
 
   @Post('message')
-  sendMessage(@Body() body: { sessionId: string; content: string }) {
-    return { streamUrl: `/v1/twin/stream/${body.sessionId}` };
+  sendMessage(@Req() req: { user?: { userId: string } }, @Body() body: TwinMessageDto) {
+    return this.digitalTwinService.sendMessage(
+      req.user?.userId ?? 'anonymous',
+      body.sessionId,
+      body.content
+    );
   }
 
   @Get('stream/:sessionId')
   stream(@Param('sessionId') sessionId: string) {
-    return { sessionId };
+    return this.digitalTwinService.openStream(sessionId);
   }
 
   @Get('context/:contactId')
-  getContext(@Param('contactId') contactId: string) {
-    return { contactId, summary: {} };
+  getContext(@Req() req: { user?: { userId: string } }, @Param('contactId') contactId: string) {
+    return this.digitalTwinService.getRelationshipContext(req.user?.userId ?? 'anonymous', contactId);
   }
 
   @Delete('session/:sessionId')
-  close(@Param('sessionId') sessionId: string) {
-    return { sessionId, closed: true };
+  close(@Req() req: { user?: { userId: string } }, @Param('sessionId') sessionId: string) {
+    return this.digitalTwinService.closeSession(req.user?.userId ?? 'anonymous', sessionId);
   }
 }

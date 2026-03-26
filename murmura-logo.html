@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Murmura — Identité Visuelle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --violet:  #7C3AED;
+      --indigo:  #4338CA;
+      --emerald: #10B981;
+      --dark:    #111827;
+      --gray:    #6B7280;
+      --light:   #F5F3FF;
+      --white:   #FFFFFF;
+    }
+
+    body {
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      padding-bottom: 120px;
+    }
+
+    /* ── COVER ─────────────────────────────── */
+    .cover {
+      background: linear-gradient(135deg, #5B21B6 0%, #3730A3 100%);
+      padding: 90px 40px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-blob {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .cover-blob.b1 { width:500px; height:500px; top:-160px; right:-120px; }
+    .cover-blob.b2 { width:380px; height:380px; bottom:-150px; left:-100px; }
+
+    .cover-tag {
+      display: inline-block;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 4px; text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 16px; border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    .cover h1 {
+      font-size: 60px; font-weight: 800;
+      color: white; letter-spacing: -2px;
+      line-height: 1;
+    }
+    .cover-sub {
+      font-size: 14px; font-weight: 300;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 3px; margin-top: 12px;
+      text-transform: uppercase;
+    }
+    .cover-line {
+      width: 40px; height: 3px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+      margin: 32px auto 0;
+    }
+
+    /* ── PAGE WRAPPER ────────────────────────── */
+    .page {
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 0 36px;
+    }
+
+    /* ── SECTION HEADER ──────────────────────── */
+    .section { padding-top: 80px; }
+    .sec-head {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 36px;
+    }
+    .sec-num {
+      width: 30px; height: 30px;
+      background: var(--violet); color: white;
+      border-radius: 9px; font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .sec-title {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    /* ── LOGO CARDS ──────────────────────────── */
+    .logo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .logo-card {
+      border-radius: 22px;
+      padding: 52px 24px 32px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 18px;
+      min-height: 230px; justify-content: center;
+    }
+    .logo-card.lc-white  { background: white; box-shadow: 0 2px 16px rgba(0,0,0,0.07); }
+    .logo-card.lc-dark   { background: #111827; }
+    .logo-card.lc-brand  { background: linear-gradient(135deg, #7C3AED, #3730A3); }
+    .card-tag {
+      font-size: 10px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .lc-white .card-tag  { color: #D1D5DB; }
+    .lc-dark  .card-tag  { color: rgba(255,255,255,0.25); }
+    .lc-brand .card-tag  { color: rgba(255,255,255,0.35); }
+
+    /* ── SYMBOL GRID ─────────────────────────── */
+    .sym-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+    .sym-card {
+      border-radius: 20px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; padding: 36px 20px;
+    }
+    .sym-card.sc-white { background:white; box-shadow:0 2px 16px rgba(0,0,0,0.07); }
+    .sym-card.sc-dark  { background:#111827; }
+    .sym-card.sc-violet{ background:#7C3AED; }
+    .sym-card.sc-gray  { background:#F3F4F6; }
+    .sym-label { font-size:10px; color:#9CA3AF; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; }
+    .sc-dark .sym-label, .sc-violet .sym-label { color:rgba(255,255,255,0.35); }
+
+    /* ── HORIZONTAL LOGO ─────────────────────── */
+    .horiz-card {
+      background:white;
+      border-radius:22px;
+      padding:48px 64px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    /* ── COLOR PALETTE ───────────────────────── */
+    .color-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
+    .swatch { border-radius:16px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.08); }
+    .swatch-block { height:88px; }
+    .swatch-info { background:white; padding:14px 14px 16px; }
+    .swatch-name { font-size:12px; font-weight:700; color:#374151; }
+    .swatch-hex  {
+      font-family:'JetBrains Mono',monospace;
+      font-size:10px; color:#9CA3AF; margin-top:3px;
+    }
+    .swatch-role { font-size:10px; color:#C4B5FD; margin-top:2px; font-weight:500; }
+
+    /* ── TYPOGRAPHY ──────────────────────────── */
+    .type-card {
+      background:white; border-radius:22px; padding:52px;
+      box-shadow:0 2px 16px rgba(0,0,0,0.07);
+    }
+    .type-row { border-bottom:1px solid #F3F4F6; padding-bottom:28px; margin-bottom:28px; }
+    .type-row:last-child { border:none; padding:0; margin:0; }
+    .type-meta { font-size:10px; color:#9CA3AF; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+
+    /* ── PRINCIPLES ──────────────────────────── */
+    .princ-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .princ-card {
+      background:white; border-radius:18px; padding:28px 22px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.06);
+    }
+    .princ-icon {
+      width:44px; height:44px; background:#F3F0FF;
+      border-radius:12px; font-size:22px;
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:16px;
+    }
+    .princ-title { font-size:13px; font-weight:700; margin-bottom:8px; }
+    .princ-text  { font-size:11px; color:var(--gray); line-height:1.7; }
+
+    /* ── DO / DON'T ──────────────────────────── */
+    .rules-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .rules-card {
+      background:white; border-radius:20px; padding:32px 36px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.06);
+    }
+    .rules-head {
+      display:flex; align-items:center; gap:10px;
+      font-size:13px; font-weight:700; margin-bottom:22px;
+    }
+    .dot-green { width:10px;height:10px;border-radius:50%;background:#10B981; }
+    .dot-red   { width:10px;height:10px;border-radius:50%;background:#EF4444; }
+    .rules-list { list-style:none; display:flex; flex-direction:column; gap:12px; }
+    .rules-list li {
+      font-size:12px; color:var(--gray);
+      display:flex; align-items:flex-start; gap:10px; line-height:1.5;
+    }
+    .rules-list li .ico { font-size:13px; flex-shrink:0; margin-top:1px; }
+
+    /* ── MOCKUPS ─────────────────────────────── */
+    .mock-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .mock-card {
+      background:white; border-radius:22px; padding:44px 24px 32px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:18px; min-height:240px;
+      box-shadow:0 2px 16px rgba(0,0,0,0.07);
+    }
+    .mock-label { font-size:10px; color:#9CA3AF; font-weight:600; letter-spacing:2px; text-transform:uppercase; }
+
+    /* Phone */
+    .phone {
+      width:88px; height:152px; background:#1F2937;
+      border-radius:18px; padding:8px 7px;
+      box-shadow:0 6px 28px rgba(0,0,0,0.25);
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .phone-notch {
+      width:28px; height:6px; background:#374151;
+      border-radius:3px; margin:0 auto 2px;
+    }
+    .phone-screen {
+      flex:1; background:linear-gradient(150deg,#7C3AED,#3730A3);
+      border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    /* Business card */
+    .bcard {
+      width:210px; height:120px;
+      background:linear-gradient(135deg,#7C3AED,#3730A3);
+      border-radius:12px; padding:20px 22px;
+      display:flex; flex-direction:column; justify-content:space-between;
+      box-shadow:0 8px 30px rgba(124,58,237,0.35);
+    }
+    .bcard-bot { font-size:7px; color:rgba(255,255,255,0.5); letter-spacing:0.5px; }
+
+    /* Favicon strip */
+    .fav-strip { display:flex; gap:12px; align-items:flex-end; }
+    .fav-item  { display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .fav-size  { font-size:9px; color:#9CA3AF; }
+
+    /* ── FOOTER ──────────────────────────────── */
+    .footer {
+      margin-top:100px;
+      background:#111827; padding:56px 40px;
+      text-align:center;
+    }
+    .footer-text { font-size:12px; color:rgba(255,255,255,0.35); letter-spacing:1px; }
+    .footer-brand { font-size:22px; font-weight:700; color:white; margin-bottom:8px; }
+  </style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║              COVER                       ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<div class="cover">
+  <div class="cover-blob b1"></div>
+  <div class="cover-blob b2"></div>
+  <div class="cover-tag">Identité Visuelle · 2025</div>
+  <h1>murmura</h1>
+  <p class="cover-sub">Messagerie Augmentée</p>
+  <div class="cover-line"></div>
+</div>
+
+<div class="page">
+
+  <!-- ─────────────────────────────────────────
+       1. PRINCIPES DE CONCEPTION
+  ───────────────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">01</div>
+      <span class="sec-title">Les 4 Critères Fondamentaux</span>
+    </div>
+    <div class="princ-grid">
+      <div class="princ-card">
+        <div class="princ-icon">🎯</div>
+        <div class="princ-title">Approprié</div>
+        <div class="princ-text">La bulle de message incarne la communication. Les vagues évoquent le murmure, la fluidité, l'intelligence contextuelle.</div>
+      </div>
+      <div class="princ-card">
+        <div class="princ-icon">✦</div>
+        <div class="princ-title">Simple</div>
+        <div class="princ-text">Deux éléments seulement : une bulle et trois courbes. Dessinable de mémoire en 30 secondes.</div>
+      </div>
+      <div class="princ-card">
+        <div class="princ-icon">👁</div>
+        <div class="princ-title">Distinctif</div>
+        <div class="princ-text">Aucun concurrent dans la messagerie n'utilise ce motif de vagues superposées à l'intérieur d'une bulle.</div>
+      </div>
+      <div class="princ-card">
+        <div class="princ-icon">⚡</div>
+        <div class="princ-title">Adaptable</div>
+        <div class="princ-text">100% vectoriel. Fonctionne du favicon 16px jusqu'au panneau publicitaire. Conçu d'abord en noir et blanc.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       2. LOGO PRINCIPAL — 3 VARIANTES
+  ───────────────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">02</div>
+      <span class="sec-title">Logo Principal — Variantes</span>
+    </div>
+    <div class="logo-grid">
+
+      <!-- Fond clair -->
+      <div class="logo-card lc-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 220" width="148" height="180">
+          <defs>
+            <linearGradient id="gc" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#8B5CF6"/>
+              <stop offset="100%" stop-color="#3730A3"/>
+            </linearGradient>
+          </defs>
+          <!-- Bulle -->
+          <path d="M28 8 L152 8 Q172 8 172 28 L172 130 Q172 150 152 150 L54 150 L20 178 L40 150 L28 150 Q8 150 8 130 L8 28 Q8 8 28 8 Z" fill="url(#gc)"/>
+          <!-- Vague 1 – subtile -->
+          <path d="M33 66 C53 52,73 52,92 66 S135 80,147 66" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.40"/>
+          <!-- Vague 2 – moyenne -->
+          <path d="M33 84 C53 70,73 70,92 84 S135 98,147 84" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.70"/>
+          <!-- Vague 3 – pleine -->
+          <path d="M33 102 C53 88,73 88,92 102 S135 116,147 102" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="1"/>
+          <!-- Texte -->
+          <text x="90" y="202" text-anchor="middle"
+                font-family="Poppins,sans-serif" font-size="25" font-weight="700"
+                fill="#1F2937" letter-spacing="2.5">murmura</text>
+        </svg>
+        <span class="card-tag">Fond Clair</span>
+      </div>
+
+      <!-- Fond sombre -->
+      <div class="logo-card lc-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 220" width="148" height="180">
+          <!-- Bulle blanche -->
+          <path d="M28 8 L152 8 Q172 8 172 28 L172 130 Q172 150 152 150 L54 150 L20 178 L40 150 L28 150 Q8 150 8 130 L8 28 Q8 8 28 8 Z" fill="white"/>
+          <!-- Vague 1 -->
+          <path d="M33 66 C53 52,73 52,92 66 S135 80,147 66" stroke="#7C3AED" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.35"/>
+          <!-- Vague 2 -->
+          <path d="M33 84 C53 70,73 70,92 84 S135 98,147 84" stroke="#7C3AED" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.65"/>
+          <!-- Vague 3 -->
+          <path d="M33 102 C53 88,73 88,92 102 S135 116,147 102" stroke="#7C3AED" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <!-- Texte -->
+          <text x="90" y="202" text-anchor="middle"
+                font-family="Poppins,sans-serif" font-size="25" font-weight="700"
+                fill="white" letter-spacing="2.5">murmura</text>
+        </svg>
+        <span class="card-tag">Fond Sombre</span>
+      </div>
+
+      <!-- Fond de marque -->
+      <div class="logo-card lc-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 220" width="148" height="180">
+          <!-- Bulle semi-transparente -->
+          <path d="M28 8 L152 8 Q172 8 172 28 L172 130 Q172 150 152 150 L54 150 L20 178 L40 150 L28 150 Q8 150 8 130 L8 28 Q8 8 28 8 Z" fill="rgba(255,255,255,0.18)"/>
+          <!-- Vague 1 -->
+          <path d="M33 66 C53 52,73 52,92 66 S135 80,147 66" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.45"/>
+          <!-- Vague 2 -->
+          <path d="M33 84 C53 70,73 70,92 84 S135 98,147 84" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.72"/>
+          <!-- Vague 3 -->
+          <path d="M33 102 C53 88,73 88,92 102 S135 116,147 102" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <!-- Texte -->
+          <text x="90" y="202" text-anchor="middle"
+                font-family="Poppins,sans-serif" font-size="25" font-weight="700"
+                fill="white" letter-spacing="2.5">murmura</text>
+        </svg>
+        <span class="card-tag">Fond de Marque</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       3. SYMBOLE SEUL
+  ───────────────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">03</div>
+      <span class="sec-title">Symbole Seul — App Icon &amp; Favicon</span>
+    </div>
+    <div class="sym-grid">
+
+      <!-- Couleur sur blanc -->
+      <div class="sym-card sc-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150" width="96" height="90">
+          <defs>
+            <linearGradient id="gs" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#8B5CF6"/>
+              <stop offset="100%" stop-color="#3730A3"/>
+            </linearGradient>
+          </defs>
+          <path d="M22 4 L138 4 Q156 4 156 22 L156 106 Q156 124 138 124 L44 124 L12 150 L30 124 L22 124 Q4 124 4 106 L4 22 Q4 4 22 4 Z" fill="url(#gs)"/>
+          <path d="M26 54 C46 40,66 40,80 54 S118 68,130 54" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.40"/>
+          <path d="M26 72 C46 58,66 58,80 72 S118 86,130 72" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.70"/>
+          <path d="M26 90 C46 76,66 76,80 90 S118 104,130 90" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="sym-label">Couleur</span>
+      </div>
+
+      <!-- Blanc sur sombre -->
+      <div class="sym-card sc-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150" width="96" height="90">
+          <path d="M22 4 L138 4 Q156 4 156 22 L156 106 Q156 124 138 124 L44 124 L12 150 L30 124 L22 124 Q4 124 4 106 L4 22 Q4 4 22 4 Z" fill="white"/>
+          <path d="M26 54 C46 40,66 40,80 54 S118 68,130 54" stroke="#7C3AED" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.35"/>
+          <path d="M26 72 C46 58,66 58,80 72 S118 86,130 72" stroke="#7C3AED" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.65"/>
+          <path d="M26 90 C46 76,66 76,80 90 S118 104,130 90" stroke="#7C3AED" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="sym-label">Inversé</span>
+      </div>
+
+      <!-- Blanc sur violet -->
+      <div class="sym-card sc-violet">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150" width="96" height="90">
+          <path d="M22 4 L138 4 Q156 4 156 22 L156 106 Q156 124 138 124 L44 124 L12 150 L30 124 L22 124 Q4 124 4 106 L4 22 Q4 4 22 4 Z" fill="rgba(255,255,255,0.20)"/>
+          <path d="M26 54 C46 40,66 40,80 54 S118 68,130 54" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.40"/>
+          <path d="M26 72 C46 58,66 58,80 72 S118 86,130 72" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.70"/>
+          <path d="M26 90 C46 76,66 76,80 90 S118 104,130 90" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="sym-label">Marque</span>
+      </div>
+
+      <!-- Monochrome noir -->
+      <div class="sym-card sc-gray">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150" width="96" height="90">
+          <path d="M22 4 L138 4 Q156 4 156 22 L156 106 Q156 124 138 124 L44 124 L12 150 L30 124 L22 124 Q4 124 4 106 L4 22 Q4 4 22 4 Z" fill="#1F2937"/>
+          <path d="M26 54 C46 40,66 40,80 54 S118 68,130 54" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.35"/>
+          <path d="M26 72 C46 58,66 58,80 72 S118 86,130 72" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.65"/>
+          <path d="M26 90 C46 76,66 76,80 90 S118 104,130 90" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="sym-label">Monochrome</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       4. VERSION HORIZONTALE
+  ───────────────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">04</div>
+      <span class="sec-title">Version Horizontale</span>
+    </div>
+    <div class="horiz-card">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 110" width="420" height="110">
+        <defs>
+          <linearGradient id="gh" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8B5CF6"/>
+            <stop offset="100%" stop-color="#3730A3"/>
+          </linearGradient>
+        </defs>
+        <!-- Symbole -->
+        <path d="M16 4 L98 4 Q112 4 112 18 L112 78 Q112 92 98 92 L34 92 L10 112 L24 92 L16 92 Q2 92 2 78 L2 18 Q2 4 16 4 Z" fill="url(#gh)"/>
+        <!-- Vagues dans symbole -->
+        <path d="M18 40 C31 31,46 31,57 40 S80 49,94 40" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.40"/>
+        <path d="M18 52 C31 43,46 43,57 52 S80 61,94 52" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.70"/>
+        <path d="M18 64 C31 55,46 55,57 64 S80 73,94 64" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- Texte "murmura" -->
+        <text x="138" y="62" font-family="Poppins,sans-serif" font-size="42" font-weight="700" fill="#1F2937" letter-spacing="-0.5">murmura</text>
+        <!-- Tagline -->
+        <text x="140" y="82" font-family="Poppins,sans-serif" font-size="11" font-weight="400" fill="#9CA3AF" letter-spacing="2.5">MESSAGERIE AUGMENTÉE</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       5. PALETTE DE COULEURS
+  ───────────────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">05</div>
+      <span class="sec-title">Palette de Couleurs</span>
+    </div>
+    <div class="color-grid">
+
+      <div class="swatch">
+        <div class="swatch-block" style="background:#7C3AED;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Violet</div>
+          <div class="swatch-hex">#7C3AED</div>
+          <div class="swatch-hex">RGB 124·58·237</div>
+          <div style="font-size:10px;color:#7C3AED;font-weight:600;margin-top:4px;">Primaire</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-block" style="background:#3730A3;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Indigo</div>
+          <div class="swatch-hex">#3730A3</div>
+          <div class="swatch-hex">RGB 55·48·163</div>
+          <div style="font-size:10px;color:#3730A3;font-weight:600;margin-top:4px;">Secondaire</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-block" style="background:#10B981;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Émeraude</div>
+          <div class="swatch-hex">#10B981</div>
+          <div class="swatch-hex">RGB 16·185·129</div>
+          <div style="font-size:10px;color:#10B981;font-weight:600;margin-top:4px;">Accent IA</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-block" style="background:#111827;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Nuit</div>
+          <div class="swatch-hex">#111827</div>
+          <div class="swatch-hex">RGB 17·24·39</div>
+          <div style="font-size:10px;color:#374151;font-weight:600;margin-top:4px;">Dark BG</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-block" style="background:#F5F3FF; border:1px solid #EDE9FE;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Lavande</div>
+          <div class="swatch-hex">#F5F3FF</div>
+          <div class="swatch-hex">RGB 245·243·255</div>
+          <div style="font-size:10px;color:#7C3AED;font-weight:600;margin-top:4px;">Light BG</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       6. TYPOGRAPHIE
+  ───────────────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">06</div>
+      <span class="sec-title">Typographie — Poppins</span>
+    </div>
+    <div class="type-card">
+      <div class="type-row">
+        <div class="type-meta">Display · Poppins 800 · Logo &amp; Titres</div>
+        <div style="font-size:52px;font-weight:800;letter-spacing:-2px;color:#111827;line-height:1.1;">murmura</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Heading · Poppins 700 · H1</div>
+        <div style="font-size:32px;font-weight:700;color:#111827;">Messagerie Augmentée</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Subheading · Poppins 600 · H2</div>
+        <div style="font-size:20px;font-weight:600;color:#374151;">Comprendre · Relier · Anticiper</div>
+      </div>
+      <div class="type-row">
+        <div class="type-meta">Body · Poppins 400 · Paragraphe</div>
+        <div style="font-size:15px;font-weight:400;color:#6B7280;line-height:1.8;max-width:560px;">Murmura transforme chaque conversation en mémoire contextuelle intelligente. Il comprend, relie et anticipe vos besoins en temps réel.</div>
+      </div>
+      <div>
+        <div class="type-meta">Label · Poppins 600 · Uppercase tracking</div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#9CA3AF;">MESSAGERIE · INTELLIGENCE · CONTEXTE</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       7. DO's & DON'Ts
+  ───────────────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">07</div>
+      <span class="sec-title">Charte d'Utilisation</span>
+    </div>
+    <div class="rules-grid">
+      <div class="rules-card">
+        <div class="rules-head"><div class="dot-green"></div>À faire</div>
+        <ul class="rules-list">
+          <li><span class="ico">✓</span> Utiliser le logo sur les fonds approuvés (blanc, sombre, violet)</li>
+          <li><span class="ico">✓</span> Respecter les proportions originales du fichier vectoriel</li>
+          <li><span class="ico">✓</span> Conserver une marge de protection égale à la hauteur de la lettre "m"</li>
+          <li><span class="ico">✓</span> Utiliser la version monochrome sur les supports une seule couleur</li>
+          <li><span class="ico">✓</span> Taille minimale : 80px de large pour la version complète</li>
+        </ul>
+      </div>
+      <div class="rules-card">
+        <div class="rules-head"><div class="dot-red"></div>À ne jamais faire</div>
+        <ul class="rules-list">
+          <li><span class="ico">✕</span> Déformer ou étirer le logo dans un seul axe</li>
+          <li><span class="ico">✕</span> Changer les couleurs en dehors de la palette officielle</li>
+          <li><span class="ico">✕</span> Ajouter des ombres, contours ou effets non approuvés</li>
+          <li><span class="ico">✕</span> Placer le logo sur un fond qui ne contraste pas suffisamment</li>
+          <li><span class="ico">✕</span> Séparer le symbole du texte hors des cas prévus (icône app)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       8. MOCKUPS
+  ───────────────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">08</div>
+      <span class="sec-title">Mises en Situation</span>
+    </div>
+    <div class="mock-grid">
+
+      <!-- Smartphone -->
+      <div class="mock-card">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150" width="44" height="41">
+              <path d="M22 4 L138 4 Q156 4 156 22 L156 106 Q156 124 138 124 L44 124 L12 150 L30 124 L22 124 Q4 124 4 106 L4 22 Q4 4 22 4 Z" fill="rgba(255,255,255,0.22)"/>
+              <path d="M26 54 C46 40,66 40,80 54 S118 68,130 54" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.45"/>
+              <path d="M26 72 C46 58,66 58,80 72 S118 86,130 72" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.72"/>
+              <path d="M26 90 C46 76,66 76,80 90 S118 104,130 90" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <span class="mock-label">App Mobile</span>
+      </div>
+
+      <!-- Carte de visite -->
+      <div class="mock-card">
+        <div class="bcard">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 220" width="60" height="73">
+            <path d="M28 8 L152 8 Q172 8 172 28 L172 130 Q172 150 152 150 L54 150 L20 178 L40 150 L28 150 Q8 150 8 130 L8 28 Q8 8 28 8 Z" fill="rgba(255,255,255,0.20)"/>
+            <path d="M33 66 C53 52,73 52,92 66 S135 80,147 66" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.40"/>
+            <path d="M33 84 C53 70,73 70,92 84 S135 98,147 84" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.70"/>
+            <path d="M33 102 C53 88,73 88,92 102 S135 116,147 102" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="bcard-bot">hello@murmura.io · murmura.io</div>
+        </div>
+        <span class="mock-label">Carte de Visite</span>
+      </div>
+
+      <!-- Favicon différentes tailles -->
+      <div class="mock-card">
+        <div class="fav-strip">
+
+          <div class="fav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150" width="64" height="60">
+              <defs><linearGradient id="gf1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#3730A3"/></linearGradient></defs>
+              <path d="M22 4 L138 4 Q156 4 156 22 L156 106 Q156 124 138 124 L44 124 L12 150 L30 124 L22 124 Q4 124 4 106 L4 22 Q4 4 22 4 Z" fill="url(#gf1)"/>
+              <path d="M26 54 C46 40,66 40,80 54 S118 68,130 54" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.40"/>
+              <path d="M26 72 C46 58,66 58,80 72 S118 86,130 72" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.70"/>
+              <path d="M26 90 C46 76,66 76,80 90 S118 104,130 90" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span class="fav-size">64px</span>
+          </div>
+
+          <div class="fav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150" width="32" height="30">
+              <defs><linearGradient id="gf2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#3730A3"/></linearGradient></defs>
+              <path d="M22 4 L138 4 Q156 4 156 22 L156 106 Q156 124 138 124 L44 124 L12 150 L30 124 L22 124 Q4 124 4 106 L4 22 Q4 4 22 4 Z" fill="url(#gf2)"/>
+              <path d="M26 54 C46 40,66 40,80 54 S118 68,130 54" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.40"/>
+              <path d="M26 72 C46 58,66 58,80 72 S118 86,130 72" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.70"/>
+              <path d="M26 90 C46 76,66 76,80 90 S118 104,130 90" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span class="fav-size">32px</span>
+          </div>
+
+          <div class="fav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 150" width="16" height="15">
+              <defs><linearGradient id="gf3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#3730A3"/></linearGradient></defs>
+              <path d="M22 4 L138 4 Q156 4 156 22 L156 106 Q156 124 138 124 L44 124 L12 150 L30 124 L22 124 Q4 124 4 106 L4 22 Q4 4 22 4 Z" fill="url(#gf3)"/>
+              <path d="M26 54 C46 40,66 40,80 54 S118 68,130 54" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.40"/>
+              <path d="M26 72 C46 58,66 58,80 72 S118 86,130 72" stroke="white" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.70"/>
+              <path d="M26 90 C46 76,66 76,80 90 S118 104,130 90" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span class="fav-size">16px</span>
+          </div>
+
+        </div>
+        <span class="mock-label">Favicon · App Icon</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       RATIONALE
+  ───────────────────────────────────────────── -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-num">09</div>
+      <span class="sec-title">Pourquoi ce Logo — Note de Design</span>
+    </div>
+    <div style="background:white;border-radius:22px;padding:48px 52px;box-shadow:0 2px 16px rgba(0,0,0,0.07);">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7C3AED;margin-bottom:16px;">Le Symbole</div>
+          <p style="font-size:13px;color:#4B5563;line-height:1.9;">La <strong>bulle de message</strong> est le langage universel de la messagerie — reconnu instantanément. À l'intérieur, les <strong>3 vagues ondulées</strong> représentent les 3 couches d'intelligence de Murmura : <em>comprendre</em> (vague 1), <em>relier</em> (vague 2), <em>anticiper</em> (vague 3). L'opacité croissante traduit la montée en puissance de l'IA. Les vagues évoquent aussi le murmure phonétique — un son doux, continu, subtil.</p>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7C3AED;margin-bottom:16px;">La Couleur</div>
+          <p style="font-size:13px;color:#4B5563;line-height:1.9;">Le <strong>violet profond</strong> (#7C3AED → #3730A3) est la couleur de la créativité, de l'intelligence artificielle et de la technologie avancée — sans être froide comme le bleu bancaire. L'<strong>émeraude</strong> (#10B981) en accent ponctuel représente la croissance et les insights en temps réel. La palette reste sobre : 2 tons principaux + 1 accent.</p>
+        </div>
+      </div>
+      <div style="height:1px;background:#F3F4F6;margin:36px 0;"></div>
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7C3AED;margin-bottom:16px;">La Typographie</div>
+        <p style="font-size:13px;color:#4B5563;line-height:1.9;max-width:680px;"><strong>Poppins</strong> en minuscules pour le nom de marque — une police géométrique moderne, chaleureuse et accessible. Le lowercase renforce la proximité et la modernité (comme Spotify, notion, linear). Le letter-spacing légèrement ouvert (+2.5px) donne de la respiration sans rendre le mot austère.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">murmura</div>
+  <div class="footer-text">Identité Visuelle — Version 1.0 · 2025 · Tous droits réservés</div>
+</div>
+
+</body>
+</html>

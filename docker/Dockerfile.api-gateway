@@ -1,8 +1,27 @@
-FROM node:20-alpine
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
+FROM node:20-bullseye-slim
+
+ENV PNPM_HOME=/pnpm
+ENV PATH=${PNPM_HOME}:${PATH}
+ENV HUSKY=0
+ENV PORT=3000
+ENV NODE_OPTIONS=--max-old-space-size=4096
+
+WORKDIR /workspace
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends openssl ca-certificates python3 make g++ \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN corepack enable
+
 COPY . .
+
 RUN pnpm install --frozen-lockfile
-RUN pnpm -C apps/api-gateway build
-CMD ["node", "apps/api-gateway/dist/main.js"]
+RUN pnpm --filter @murmura/api-gateway exec prisma generate --schema prisma/schema.prisma
+RUN pnpm --filter @murmura/api-gateway build
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=20 CMD node -e "fetch('http://127.0.0.1:3000/health').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+
+CMD ["sh", "-lc", "pnpm --filter @murmura/api-gateway exec prisma migrate deploy --schema prisma/schema.prisma && pnpm exec tsx apps/api-gateway/dist/main.js"]

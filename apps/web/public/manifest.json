@@ -1,0 +1,37 @@
+{
+  "name": "Murmura",
+  "short_name": "Murmura",
+  "description": "Messagerie relationnelle type WhatsApp en MVP web et mobile",
+  "theme_color": "#0a7b61",
+  "background_color": "#efeae2",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "start_url": "/chat",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nouveau message",
+      "url": "/chat/new",
+      "description": "Demarrer une nouvelle conversation"
+    },
+    {
+      "name": "Conversations",
+      "url": "/chat",
+      "description": "Ouvrir la boite de reception"
+    }
+  ]
+}
