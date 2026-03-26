@@ -205,7 +205,7 @@ function LandingPage() {
               </span>
               <span className="brand-copy">
                 <strong>Murmura</strong>
-                <span>Messagerie relationnelle augmentee</span>
+                <span>Messagerie privee augmentee</span>
               </span>
             </a>
 
@@ -220,12 +220,12 @@ function LandingPage() {
 
           <div id="top" className="hero-grid">
             <section className="hero-copy reveal">
-              <div className="eyebrow">Infrastructure relationnelle</div>
-              <h1>Murmura transforme chaque conversation en contexte exploitable.</h1>
+              <div className="eyebrow">Conversation privee, contexte durable</div>
+              <h1>Murmura est une messagerie privee qui se souvient de ce qui compte.</h1>
               <p className="hero-lead">
-                Une messagerie interne de reference, une memoire contextuelle durable, une lecture
-                relationnelle de la situation, puis une action externe seulement quand elle est
-                justifiee et gouvernee.
+                Pour la vie personnelle comme pour le travail, Murmura aide a proteger la conversation,
+                conserver la memoire de la relation, comprendre la situation et n utiliser un autre canal
+                que lorsque cela devient vraiment utile.
               </p>
 
               <div className="hero-actions">
@@ -236,16 +236,16 @@ function LandingPage() {
 
               <div className="hero-metrics">
                 <article className="metric-card reveal">
-                  <span className="metric-label">Centre de gravite</span>
-                  <strong>Conversation interne Murmura</strong>
+                  <span className="metric-label">Valeur centrale</span>
+                  <strong>Conversation privee de reference</strong>
                 </article>
                 <article className="metric-card reveal">
-                  <span className="metric-label">Actif principal</span>
-                  <strong>Memoire relationnelle persistante</strong>
+                  <span className="metric-label">Ce que Murmura preserve</span>
+                  <strong>Memoire relationnelle durable</strong>
                 </article>
                 <article className="metric-card reveal">
-                  <span className="metric-label">Execution externe</span>
-                  <strong>Jumeau numerique sous controle</strong>
+                  <span className="metric-label">Extension optionnelle</span>
+                  <strong>Action externe sous controle</strong>
                 </article>
               </div>
             </section>
@@ -259,17 +259,17 @@ function LandingPage() {
               <div className="console-block">
                 <div className="console-heading">Ce que Murmura fait</div>
                 <p>
-                  Murmura capte la conversation, reconstruit l'historique, qualifie la relation et
-                  prepare la bonne action avant toute sortie vers un canal externe.
+                  Murmura remet la conversation privee au centre, conserve le contexte relationnel
+                  et aide a mieux repondre avant toute sortie vers un autre canal.
                 </p>
               </div>
 
               <div className="console-signals">
                 {[
                   ['Contexte', '94%'],
-                  ['Memoire', '88%'],
-                  ['Decision', '82%'],
-                  ['Gouvernance', '91%']
+                  ['Memoire', '91%'],
+                  ['Nuance', '86%'],
+                  ['Protection', '89%']
                 ].map(([label, width]) => (
                   <div key={label} className="signal">
                     <span>{label}</span>
@@ -280,10 +280,10 @@ function LandingPage() {
 
               <div className="console-grid">
                 {[
-                  ['Messagerie', "Interne d'abord"],
+                  ['Messagerie', 'Privee'],
                   ['IA', 'Contextualisee'],
-                  ['Canaux externes', 'Secondaires'],
-                  ['Action', 'Tracee']
+                  ['Usage', 'Personnel ou pro'],
+                  ['Canaux externes', 'Secondaires']
                 ].map(([label, value]) => (
                   <article key={label} className="console-panel">
                     <span>{label}</span>
@@ -302,9 +302,9 @@ function LandingPage() {
               <div>
                 <h2>Le probleme que Murmura traite</h2>
                 <p>
-                  La plupart des organisations gerent des relations critiques avec des outils qui savent
-                  transporter des messages, mais pas conserver le sens, l'historique et les contraintes
-                  de ces relations.
+                  Les messageries actuelles sont excellentes pour envoyer vite. Elles sont beaucoup moins
+                  bonnes pour proteger une conversation privee, conserver sa memoire et aider a bien agir
+                  dans la duree.
                 </p>
               </div>
             </div>
@@ -340,20 +340,20 @@ function LandingPage() {
               <div>
                 <h2>Ce que Murmura apporte</h2>
                 <p>
-                  Murmura n'est pas une simple interface de chat. C'est une couche relationnelle qui
-                  relie conversation, memoire, analyse, arbitrage et execution.
+                  Murmura reste une messagerie simple a utiliser, mais elle ajoute ce qui manque aux outils
+                  classiques: memoire, contexte, intelligence relationnelle et controle.
                 </p>
               </div>
             </div>
 
             <div className="solution-grid">
               {[
-                ['Base operationnelle', 'Messagerie interne de reference', "La relation se construit d'abord dans un espace Murmura central. Le canal externe n'impose plus seul le rythme ni la logique de decision."],
-                ['Actif durable', 'Memoire contextuelle exploitable', 'Engagements, tensions, antecedents, signaux faibles, sujets sensibles et habitudes deviennent des donnees utiles au lieu de rester des souvenirs disperses.'],
-                ['Decision', 'Analyse IA avec profondeur relationnelle', "L'IA ne travaille plus sur un message isole. Elle raisonne sur la trajectoire de la relation et aide a choisir la bonne posture, pas seulement la bonne formulation."],
-                ['Pilotage', 'Vue relationnelle et priorisation', "Murmura expose la tension, l'urgence, les opportunites et les risques pour permettre un pilotage plus rigoureux des echanges sensibles."],
-                ['Execution', 'Jumeau numerique sous gouvernance', "L'action externe passe par un niveau dedie: simulation, preparation, puis execution controlee seulement quand le contexte valide cette transition."],
-                ['Architecture', 'Canaux externes ramenes au rang de sources', "Email, telephone et messageries tierces servent d'abord a nourrir le contexte. Ils ne sont plus le centre fonctionnel du systeme."]
+                ['Base', 'Une vraie conversation privee de reference', "La relation se construit d'abord dans Murmura. La conversation retrouve un centre stable au lieu d'etre dispersee entre plusieurs applications."],
+                ['Memoire', 'Une memoire relationnelle utile', 'Promesses, sensibilites, habitudes, antecedents et sujets delicats restent disponibles pour mieux comprendre chaque nouvel echange.'],
+                ['IA', 'Une assistance qui comprend la relation', "L'IA ne se limite pas a reformuler. Elle aide a lire la situation, le ton, le risque et la bonne posture dans le temps."],
+                ['Usage', 'Un produit pour la vie perso comme pour le travail', "Murmura peut servir a proteger une relation intime, familiale, amicale ou professionnelle. Le coeur reste le meme: mieux converser en prive."],
+                ['Action', 'Un jumeau numerique seulement quand il faut', "Si un email, un appel ou un autre canal est necessaire, Murmura peut le preparer sans faire sortir la conversation du cadre de decision."],
+                ['Architecture', 'Les autres canaux restent autour, pas au centre', "Email, telephone et services tiers servent a nourrir le contexte ou a executer une action. Ils ne definissent plus seuls la relation."]
               ].map(([kicker, title, body]) => (
                 <article key={title} className="solution-card reveal">
                   <div className="solution-kicker">{kicker}</div>
@@ -370,8 +370,8 @@ function LandingPage() {
               <div>
                 <h2>Fonctionnement du systeme</h2>
                 <p>
-                  Murmura suit une chaine simple: initier, contextualiser, analyser, arbitrer, puis
-                  agir. Chaque etape ajoute une couche de qualite et de controle.
+                  Murmura suit une logique simple: converser, se souvenir, comprendre, puis agir si
+                  necessaire. Cette chaine fonctionne autant pour un usage personnel que professionnel.
                 </p>
               </div>
             </div>
@@ -405,8 +405,9 @@ function LandingPage() {
               <div>
                 <h2>Pourquoi cela compte</h2>
                 <p>
-                  Murmura resout un probleme de fond: l'incapacite des organisations a traiter la
-                  relation comme un actif operationnel, memorise, pilotable et gouverne.
+                  Murmura traite un probleme quotidien: nous avons tous des conversations importantes,
+                  mais presque aucun outil ne nous aide a les garder privees, coherentes et intelligentes
+                  dans la duree.
                 </p>
               </div>
             </div>
@@ -414,11 +415,11 @@ function LandingPage() {
             <div className="impact-grid">
               <article className="impact-overview reveal">
                 <div className="eyebrow">Effets attendus</div>
-                <div className="impact-overline">La relation devient un actif pilotable</div>
-                <h3>Moins de perte de contexte. Plus de maitrise. Une meilleure qualite d'action.</h3>
+                <div className="impact-overline">La conversation privee gagne en qualite</div>
+                <h3>Moins d oubli. Plus de nuance. Une relation mieux protegee dans le temps.</h3>
                 <p>
-                  La valeur de Murmura vient d'une meilleure qualite de decision dans des environnements
-                  ou les echanges ont des consequences durables.
+                  La valeur de Murmura vient d une meilleure qualite de conversation, d une memoire plus
+                  fiable et d une aide plus juste au moment de repondre ou d agir.
                 </p>
 
                 <div className="impact-metrics impact-metrics-premium">
@@ -434,9 +435,9 @@ function LandingPage() {
 
               <div className="impact-cases">
                 {[
-                  ['Directions et fondateurs', 'Pour piloter les relations a haute sensibilite avec plus de memoire, de discernement et de discipline.'],
-                  ['Business, operations et account management', "Pour suivre les engagements, clarifier les risques et reduire l'improvisation dans les interactions recurrentes."],
-                  ['Environnements IA sous contrainte', "Pour disposer d'une IA contextuelle et utile sans abandonner la gouvernance de l'action externe."]
+                  ['Usage personnel', 'Pour mieux proteger des conversations intimes, familiales, sensibles ou emotionnellement chargees.'],
+                  ['Usage professionnel', 'Pour suivre une relation client, partenaire, candidat ou collegue avec plus de memoire et moins d improvisation.'],
+                  ['Usage assiste par IA', "Pour beneficier d'une aide contextuelle sans laisser l'automatisation prendre le controle de la relation."]
                 ].map(([title, body]) => (
                   <article key={title} className="impact-card reveal">
                     <h3>{title}</h3>
@@ -453,20 +454,20 @@ function LandingPage() {
                 <div className="eyebrow">Acces anticipe</div>
                 <h2>Rejoindre la waitlist Murmura</h2>
                 <p>
-                  Murmura s'adresse aux equipes qui veulent traiter la relation comme une infrastructure.
-                  Rejoignez la waitlist pour suivre les prochaines ouvertures, demos privees et mises en
-                  circulation du produit.
+                  Murmura s adresse a toutes les personnes qui veulent une meilleure messagerie privee,
+                  ainsi qu aux equipes qui gerent des relations importantes. Rejoignez la waitlist pour
+                  suivre les prochaines ouvertures et demonstrations du produit.
                 </p>
               </div>
 
               <form className="waitlist-form" onSubmit={handleWaitlistSubmit}>
                 <label className="waitlist-field">
-                  <span>Email professionnel</span>
-                  <input type="email" placeholder="vous@entreprise.com" value={email} onChange={(event) => setEmail(event.target.value)} required />
+                  <span>Email</span>
+                  <input type="email" placeholder="vous@example.com" value={email} onChange={(event) => setEmail(event.target.value)} required />
                 </label>
                 <label className="waitlist-field">
-                  <span>Organisation</span>
-                  <input type="text" placeholder="Nom de votre structure" value={organization} onChange={(event) => setOrganization(event.target.value)} required />
+                  <span>Organisation ou contexte d usage</span>
+                  <input type="text" placeholder="Personnel, equipe, entreprise..." value={organization} onChange={(event) => setOrganization(event.target.value)} required />
                 </label>
                 <button type="submit" className="button button-primary waitlist-button" disabled={submitState === 'submitting'}>
                   {submitState === 'submitting' ? 'Envoi en cours...' : 'Rejoindre la waitlist'}
@@ -483,15 +484,15 @@ function LandingPage() {
           <section className="section final-section">
             <div className="final-panel reveal">
               <div className="eyebrow">Synthese</div>
-              <h2>Murmura fait passer la conversation du statut de flux a celui d'infrastructure.</h2>
+              <h2>Murmura remet la conversation privee au centre et lui redonne de la memoire.</h2>
               <p>
-                Le produit donne aux organisations une base claire pour comprendre une relation, en
-                conserver la memoire, raisonner avec contexte et agir avec plus de justesse.
+                Le produit donne aux personnes et aux equipes une base claire pour converser, se souvenir,
+                comprendre une relation et agir avec plus de justesse.
               </p>
               <p>
-                Le probleme resolu est structurel: trop de conversations importantes reposent encore sur
-                des outils sans memoire relationnelle, sans lecture de situation et sans gouvernance de
-                l'action. Murmura corrige exactement cela.
+                Le probleme resolu est simple a comprendre: trop de conversations importantes reposent
+                encore sur des outils qui transportent des messages, mais ne protegent ni la memoire,
+                ni la nuance, ni la qualite de la relation. Murmura corrige exactement cela.
               </p>
             </div>
           </section>
