@@ -37,6 +37,35 @@ La stack Docker expose maintenant la landing sur:
 
 - `http://localhost:4174`
 
+## Deploiement Vercel
+
+Deployer le dossier `apps/MurmuraLandingPage` comme projet Vite.
+
+- fichier de config: `vercel.json`
+- dossier de sortie: `dist`
+- rewrite SPA active vers `index.html`
+
+Variables d'environnement a definir si necessaire:
+
+- `VITE_WAITLIST_ENDPOINT`
+- `VITE_WAITLIST_PROVIDER`
+- `VITE_WAITLIST_ANALYTICS_ENDPOINT`
+
+## Deploiement Netlify
+
+Deployer le dossier `apps/MurmuraLandingPage` comme site statique.
+
+- fichier de config: `netlify.toml`
+- commande de build: `pnpm build`
+- dossier publie: `dist`
+- redirect SPA active vers `index.html`
+
+Variables d'environnement a definir si necessaire:
+
+- `VITE_WAITLIST_ENDPOINT`
+- `VITE_WAITLIST_PROVIDER`
+- `VITE_WAITLIST_ANALYTICS_ENDPOINT`
+
 ## Scripts
 
 - `pnpm -C apps/MurmuraLandingPage dev`
