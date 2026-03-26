@@ -1,6 +1,26 @@
 name: murmura-prod
 
 services:
+  landing:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.landing
+      args:
+        VITE_WAITLIST_ENDPOINT: ${VITE_WAITLIST_ENDPOINT:-}
+        VITE_WAITLIST_PROVIDER: ${VITE_WAITLIST_PROVIDER:-generic}
+        VITE_WAITLIST_ANALYTICS_ENDPOINT: ${VITE_WAITLIST_ANALYTICS_ENDPOINT:-}
+    image: murmura-landing:prod
+    ports:
+      - "4174:80"
+    restart: unless-stopped
+    networks:
+      - murmura-network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+
   web:
     build:
       context: ..
