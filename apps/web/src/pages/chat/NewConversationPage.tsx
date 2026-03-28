@@ -14,11 +14,10 @@ export function NewConversationPage({ embedded = false }: { embedded?: boolean }
 
   return (
     <div className={embedded ? 'thread-embedded-panel stack' : 'surface stack'}>
-      <div className="stack" style={{ gap: 8 }}>
-        <h2 style={{ margin: 0 }}>Nouvelle conversation Murmura</h2>
-        <p className="muted" style={{ margin: 0 }}>
-          La conversation est ouverte dans le canal interne de Murmura. Le numero de telephone,
-          l'email ou les identifiants externes servent ici a nourrir le contexte relationnel.
+      <div style={{ display: 'grid', gap: 6 }}>
+        <h2 style={{ margin: 0, fontSize: '1.1rem' }}>Nouvelle conversation</h2>
+        <p className="muted" style={{ margin: 0, fontSize: '0.85rem', lineHeight: 1.5 }}>
+          Canal interne Murmura. Le numero, l'email ou l'identifiant externe alimente le contexte relationnel.
         </p>
       </div>
 
@@ -27,6 +26,7 @@ export function NewConversationPage({ embedded = false }: { embedded?: boolean }
         placeholder="Numero, email ou identifiant principal"
         value={interlocuteurId}
         onChange={(event) => setInterlocuteurId(event.target.value)}
+        error={error ?? undefined}
       />
 
       <Input
@@ -34,12 +34,10 @@ export function NewConversationPage({ embedded = false }: { embedded?: boolean }
         placeholder="Email, telephone, notes ou precision relationnelle"
         value={subject}
         onChange={(event) => setSubject(event.target.value)}
-        error={error ?? undefined}
       />
 
-      <div className="muted" style={{ fontSize: '0.92rem' }}>
-        Les envois vers des canaux externes passent ensuite par le jumeau numerique, qui peut
-        appeler Murmuraclaw si vous choisissez d'agir hors de la messagerie interne.
+      <div className="muted" style={{ fontSize: '0.8rem', lineHeight: 1.5 }}>
+        Les canaux externes (WhatsApp, SMS, email) passent par le jumeau numerique via Murmuraclaw.
       </div>
 
       <Button
@@ -57,8 +55,8 @@ export function NewConversationPage({ embedded = false }: { embedded?: boolean }
               interlocuteurId: interlocuteurId.trim(),
               subject: subject.trim() || undefined
             });
-            notifyMessagesRefresh();
             navigate(`/chat/thread/${thread.id}`);
+            setTimeout(() => notifyMessagesRefresh(), 50);
           } catch (threadError) {
             setError(threadError instanceof Error ? threadError.message : 'Creation de la conversation impossible');
           } finally {

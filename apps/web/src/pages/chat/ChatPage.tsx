@@ -3,11 +3,17 @@ import { AssistantPanel } from '../../components/chat/AssistantPanel/AssistantPa
 import { MessageArea } from '../../components/chat/MessageArea/MessageArea';
 import { ThreadList } from '../../components/chat/ThreadList/ThreadList';
 import { DashboardPage } from '../intelligence/DashboardPage';
+import { InsightsPage } from '../intelligence/InsightsPage';
 import { MemoryPage } from '../intelligence/MemoryPage';
 import { RelationshipsPage } from '../intelligence/RelationshipsPage';
 import { RelationshipDetailPage } from '../intelligence/RelationshipDetailPage';
+import { AutonomySettingsPage } from '../settings/AutonomySettingsPage';
+import { ChannelSettingsPage } from '../settings/ChannelSettingsPage';
+import { GovernanceSettingsPage } from '../settings/GovernanceSettingsPage';
 import { ProfileSettingsPage } from '../settings/ProfileSettingsPage';
+import { SettingsPage } from '../settings/SettingsPage';
 import { NewConversationPage } from './NewConversationPage';
+import { useAuth } from '../../hooks/useAuth';
 import { useRoute } from '../../utils/router';
 
 const workspaceGap = 18;
@@ -40,6 +46,13 @@ const espaceMurmuraItems = [
   }
 ];
 
+const settingsItems = [
+  { label: 'General', href: '/settings', description: 'Vue d\'ensemble des parametres.' },
+  { label: 'Canaux', href: '/settings/channels', description: 'Connectez WhatsApp, SMS, email et autres canaux.' },
+  { label: 'Autonomie', href: '/settings/autonomy', description: 'Controle du niveau d\'autonomie du jumeau numerique.' },
+  { label: 'Gouvernance', href: '/settings/governance', description: 'Regles ethiques et limites d\'action.' }
+];
+
 function isSpaceRoute(pathname: string) {
   return (
     pathname === '/intelligence' ||
@@ -47,6 +60,10 @@ function isSpaceRoute(pathname: string) {
     pathname === '/settings/profile' ||
     pathname === '/profile'
   );
+}
+
+function isSettingsRoute(pathname: string) {
+  return pathname === '/settings' || (pathname.startsWith('/settings/') && pathname !== '/settings/profile');
 }
 
 function ThreadListSpaceMenu() {
@@ -73,6 +90,44 @@ function ThreadListSpaceMenu() {
             <span>{item.description}</span>
           </button>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function ThreadListSettingsMenu() {
+  const { pathname, navigate } = useRoute();
+  const { logout } = useAuth();
+
+  return (
+    <section className="thread-list-shell thread-panel-shell">
+      <div className="thread-list-heading">
+        <h2>Parametres</h2>
+        <p className="muted" style={{ margin: 0 }}>
+          Canaux, autonomie, gouvernance et preferences generales.
+        </p>
+      </div>
+
+      <div className="thread-space-menu">
+        {settingsItems.map((item) => (
+          <button
+            key={item.href}
+            type="button"
+            className={pathname === item.href ? 'thread-space-link active' : 'thread-space-link'}
+            onClick={() => navigate(item.href)}
+          >
+            <strong>{item.label}</strong>
+            <span>{item.description}</span>
+          </button>
+        ))}
+
+        <button
+          type="button"
+          className="thread-logout-button"
+          onClick={() => void logout()}
+        >
+          Se deconnecter
+        </button>
       </div>
     </section>
   );
@@ -108,6 +163,7 @@ export function ChatPage() {
   const isStackedLayout = workspaceWidth > 0 && workspaceWidth <= 1400;
   const showNewConversationPanel = pathname === '/chat/new';
   const showSpaceMenu = isSpaceRoute(pathname) && !showNewConversationPanel;
+  const showSettingsMenu = isSettingsRoute(pathname);
 
   const maxLeftWidth = useMemo(() => {
     if (!workspaceWidth || isStackedLayout) {
@@ -197,6 +253,8 @@ export function ChatPage() {
 
   const leftPanel = showNewConversationPanel ? (
     <NewConversationPage embedded />
+  ) : showSettingsMenu ? (
+    <ThreadListSettingsMenu />
   ) : showSpaceMenu ? (
     <ThreadListSpaceMenu />
   ) : (
@@ -212,8 +270,18 @@ export function ChatPage() {
       <RelationshipsPage />
     ) : pathname.startsWith('/intelligence/relationships/') ? (
       <RelationshipDetailPage />
+    ) : pathname === '/intelligence/insights' ? (
+      <InsightsPage />
     ) : pathname === '/settings/profile' || pathname === '/profile' ? (
       <ProfileSettingsPage />
+    ) : pathname === '/settings' ? (
+      <SettingsPage />
+    ) : pathname === '/settings/channels' ? (
+      <ChannelSettingsPage />
+    ) : pathname === '/settings/autonomy' ? (
+      <AutonomySettingsPage />
+    ) : pathname === '/settings/governance' ? (
+      <GovernanceSettingsPage />
     ) : (
       <MessageArea />
     );

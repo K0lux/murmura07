@@ -211,7 +211,7 @@ select {
 }
 
 .content-chat {
-  padding: 4px 12px 12px 8px;
+  padding: 12px 12px 12px 8px;
 }
 
 .install-banner {
@@ -275,7 +275,7 @@ select {
   display: grid;
   grid-template-columns: minmax(320px, 350px) minmax(0, 1fr) minmax(320px, 380px);
   gap: 18px;
-  height: calc(100vh - 16px);
+  height: calc(100vh - 24px);
 }
 
 .chat-column {
@@ -333,6 +333,8 @@ select {
 }
 
 .thread-list-shell,
+.thread-embedded-panel,
+.content-panel-shell,
 .chat-main-shell,
 .assistant-shell,
 .card,
@@ -354,7 +356,7 @@ select {
   grid-template-rows: auto auto auto minmax(0, 1fr);
   gap: 16px;
   padding: 16px;
-  height: calc(100vh - 16px);
+  height: calc(100vh - 24px);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(250, 248, 255, 0.92) 100%);
 }
@@ -367,7 +369,20 @@ select {
   display: grid;
   align-content: start;
   gap: 16px;
-  min-height: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px;
+  scrollbar-width: none;
+}
+
+.content-panel-shell {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  height: calc(100vh - 24px);
+  overflow-y: auto;
+  padding: 20px;
+  scrollbar-width: none;
 }
 
 .thread-space-menu {
@@ -407,6 +422,24 @@ select {
   transform: translateY(-1px);
 }
 
+.thread-logout-button {
+  width: 100%;
+  border: 1px solid rgba(220, 60, 60, 0.22);
+  border-radius: 12px;
+  background: rgba(220, 60, 60, 0.04);
+  color: var(--danger);
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 120ms ease;
+}
+
+.thread-logout-button:hover {
+  background: rgba(220, 60, 60, 0.11);
+}
+
 .thread-list-header {
   display: flex;
   align-items: center;
@@ -416,9 +449,11 @@ select {
 
 .thread-list-heading {
   display: grid;
+  gap: 6px;
 }
 
-.thread-list-header h2 {
+.thread-list-header h2,
+.thread-list-heading h2 {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
@@ -668,11 +703,10 @@ select {
 }
 
 .chat-main-shell {
-  display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
-  gap: 16px;
-  height: calc(100vh - 16px);
-  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 24px);
+  padding: 18px 18px 0;
 }
 
 .chat-welcome-state {
@@ -706,8 +740,15 @@ select {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
+  flex-shrink: 0;
   padding-bottom: 16px;
+  margin-bottom: 16px;
   border-bottom: 1px solid var(--line);
+}
+
+.chat-main-shell > .chat-preview-card {
+  flex-shrink: 0;
+  margin-bottom: 16px;
 }
 
 .chat-thread-profile {
@@ -761,7 +802,7 @@ select {
   display: grid;
   align-content: start;
   gap: 10px;
-  grid-row: 3;
+  flex: 1 1 0;
   min-height: 0;
   overflow-y: auto;
   padding: 4px 8px 12px;
@@ -870,6 +911,9 @@ select {
 .chat-composer-shell {
   display: grid;
   gap: 10px;
+  flex-shrink: 0;
+  border-top: 1px solid var(--line);
+  padding: 14px 0 18px;
 }
 
 .chat-composer-error {
@@ -964,7 +1008,7 @@ select {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 16px;
-  height: calc(100vh - 16px);
+  height: calc(100vh - 24px);
   padding: 16px;
 }
 
@@ -1016,6 +1060,22 @@ select {
   border: 1px solid rgba(255, 255, 255, 0.82);
   background: rgba(255, 255, 255, 0.88);
   box-shadow: var(--shadow);
+}
+
+.input-group {
+  display: grid;
+  gap: 6px;
+}
+
+.input-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.input-error {
+  font-size: 0.82rem;
+  color: var(--danger);
 }
 
 .input,
@@ -1101,7 +1161,7 @@ select {
   .chat-workspace {
     grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
     height: auto;
-    min-height: calc(100vh - 16px);
+    min-height: calc(100vh - 24px);
   }
 
   .chat-assistant-panel {
@@ -1110,7 +1170,7 @@ select {
 
   .thread-list-shell,
   .chat-main-shell {
-    height: calc(100vh - 16px);
+    height: calc(100vh - 24px);
   }
 
   .assistant-shell {

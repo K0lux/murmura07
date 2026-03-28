@@ -67,6 +67,8 @@ export function useMessages() {
   const { user } = useAuth();
   const [threads, setThreads] = useState<ReturnType<typeof mapThread>[]>([]);
   const [messages, setMessages] = useState<ReturnType<typeof mapMessage>[]>([]);
+  const [isLoadingThreads, setIsLoadingThreads] = useState(true);
+  const [threadsError, setThreadsError] = useState<string | null>(null);
   const activeThreadId = pathname.startsWith('/chat/thread/')
     ? pathname.replace('/chat/thread/', '')
     : null;
@@ -76,6 +78,7 @@ export function useMessages() {
 
     const loadThreads = async () => {
       try {
+        setThreadsError(null);
         const nextThreads = await getThreads();
         const nextThreadsWithMessages = await Promise.all(
           nextThreads.map(async (thread) => {
@@ -90,10 +93,17 @@ export function useMessages() {
 
         if (!cancelled) {
           setThreads(nextThreadsWithMessages);
+          setIsLoadingThreads(false);
         }
-      } catch {
+      } catch (err) {
         if (!cancelled) {
           setThreads([]);
+          setIsLoadingThreads(false);
+          const msg =
+            err && typeof err === 'object' && 'message' in err
+              ? String((err as { message: unknown }).message)
+              : 'Erreur inconnue';
+          setThreadsError(msg);
         }
       }
     };
@@ -165,6 +175,8 @@ export function useMessages() {
 
   return {
     threads,
+    isLoadingThreads,
+    threadsError,
     activeThreadId,
     activeThread,
     activeMessages,
