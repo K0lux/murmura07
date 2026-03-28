@@ -8,6 +8,24 @@ export function MessageInput() {
   const [error, setError] = useState<string | null>(null);
   const { activeThreadId } = useMessages();
 
+  const handleSend = async () => {
+    if (!activeThreadId || value.trim().length === 0 || loading) {
+      return;
+    }
+
+    setError(null);
+    setLoading(true);
+    try {
+      await sendMessage(activeThreadId, { content: value.trim() });
+      setValue('');
+      notifyMessagesRefresh();
+    } catch (sendError) {
+      setError(sendError instanceof Error ? sendError.message : 'Envoi impossible');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="chat-composer-shell">
       {error ? <div className="chat-composer-error">{error}</div> : null}
@@ -15,9 +33,15 @@ export function MessageInput() {
       <div className="chat-composer-row">
         <textarea
           className="chat-composer-input"
-          placeholder="Tapez votre message..."
+          placeholder="Votre message…"
           value={value}
           onChange={(event) => setValue(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+              event.preventDefault();
+              void handleSend();
+            }
+          }}
         />
 
         <div className="chat-composer-actions">
@@ -31,25 +55,21 @@ export function MessageInput() {
             type="button"
             className="chat-composer-send"
             disabled={loading || !activeThreadId || value.trim().length === 0}
-            onClick={async () => {
-              if (!activeThreadId || value.trim().length === 0) {
-                return;
-              }
-
-              setError(null);
-              setLoading(true);
-              try {
-                await sendMessage(activeThreadId, { content: value.trim() });
-                setValue('');
-                notifyMessagesRefresh();
-              } catch (sendError) {
-                setError(sendError instanceof Error ? sendError.message : 'Envoi impossible');
-              } finally {
-                setLoading(false);
-              }
-            }}
+            onClick={() => void handleSend()}
+            title="Envoyer (Entrée)"
+            aria-label="Envoyer"
           >
-            {loading ? '...' : '>'}
+            {loading ? (
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                <circle cx="12" cy="12" r="9" opacity="0.3" />
+                <path d="M12 3a9 9 0 0 1 9 9" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 2 11 13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" fill="currentColor" stroke="none" />
+              </svg>
+            )}
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { type ApiMessage, type ApiThread, getMessages, getThreads } from '../services/messages.service';
+import { type ApiMessage, type ApiThread, getMessages, getThreads, markAsRead } from '../services/messages.service';
 import { useAuth } from './useAuth';
 import { useRoute } from '../utils/router';
 import type { ApiAnalysis, StoredCognitivePayload } from '../services/analyze.service';
@@ -101,8 +101,10 @@ export function useMessages() {
     void loadThreads();
     const refresh = () => void loadThreads();
     window.addEventListener(messagesRefreshEvent, refresh);
+    const intervalId = setInterval(() => void loadThreads(), 30000);
     return () => {
       cancelled = true;
+      clearInterval(intervalId);
       window.removeEventListener(messagesRefreshEvent, refresh);
     };
   }, []);
@@ -121,6 +123,18 @@ export function useMessages() {
         if (!cancelled) {
           setMessages(nextMessages.map((message) => mapMessage(message, user?.id ?? null)));
         }
+
+        // Mark inbound unread messages as read (fire and forget)
+        const unread = nextMessages.filter(
+          (msg) => !msg.readAt && msg.senderUserId !== user?.id
+        );
+        if (unread.length > 0) {
+          await Promise.allSettled(unread.map((msg) => markAsRead(msg.id)));
+          // Refresh thread list to update unread counters
+          if (!cancelled) {
+            window.dispatchEvent(new Event(messagesRefreshEvent));
+          }
+        }
       } catch {
         if (!cancelled) {
           setMessages([]);
@@ -131,8 +145,10 @@ export function useMessages() {
     void loadMessages();
     const refresh = () => void loadMessages();
     window.addEventListener(messagesRefreshEvent, refresh);
+    const intervalId = setInterval(() => void loadMessages(), 5000);
     return () => {
       cancelled = true;
+      clearInterval(intervalId);
       window.removeEventListener(messagesRefreshEvent, refresh);
     };
   }, [activeThreadId, user?.id]);
