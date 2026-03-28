@@ -10,10 +10,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   ref
 ) {
   return (
-    <label className="stack">
-      {label ? <span>{label}</span> : null}
+    <label className="input-group">
+      {label ? <span className="input-label">{label}</span> : null}
       <input ref={ref} className="input" {...props} />
-      {error ? <span style={{ color: 'var(--danger)' }}>{error}</span> : null}
+      {error ? <span className="input-error">{error}</span> : null}
     </label>
   );
 });

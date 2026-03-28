@@ -45,7 +45,7 @@ export function MemoryPage() {
   }, [selectedSource]);
 
   return (
-    <div className="stack">
+    <section className="content-panel-shell">
       <MemorySearchBar
         query={query}
         onQueryChange={setQuery}
@@ -96,6 +96,6 @@ export function MemoryPage() {
           </div>
         </div>
       ) : null}
-    </div>
+    </section>
   );
 }

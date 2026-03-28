@@ -17,7 +17,6 @@ export function MessageBubble({ message }: { message: Message }) {
       <p>{message.content}</p>
       <div className="message-bubble-meta">
         <span>{formattedTime}</span>
-        <span>{message.channel}</span>
       </div>
     </article>
   );

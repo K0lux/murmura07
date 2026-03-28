@@ -6,7 +6,13 @@ import { useRoute } from '../../utils/router';
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const { pathname } = useRoute();
-  const isChatRoute = pathname === '/chat' || pathname.startsWith('/chat/');
+  const isChatRoute =
+    pathname === '/' ||
+    pathname === '/chat' ||
+    pathname.startsWith('/chat/') ||
+    pathname.startsWith('/intelligence') ||
+    pathname.startsWith('/settings') ||
+    pathname === '/profile';
 
   return (
     <div className="app-shell">

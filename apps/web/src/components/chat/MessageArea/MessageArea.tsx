@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useMessages } from '../../../hooks/useMessages';
 import { useThreadPreview } from '../../../stores/thread-preview.store';
 import { useRoute } from '../../../utils/router';
@@ -27,6 +28,11 @@ export function MessageArea() {
   const { activeMessages, typing, activeThread } = useMessages();
   const { preview, clearPreview } = useThreadPreview();
   const { navigate } = useRoute();
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [activeMessages]);
 
   if (!activeThread && !preview) {
     return (
@@ -54,8 +60,12 @@ export function MessageArea() {
             </div>
           </div>
         </div>
-        <button type="button" className="chat-thread-menu">
-          ...
+        <button type="button" className="chat-thread-menu" title="Options" aria-label="Options de la conversation">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <circle cx="5" cy="12" r="1.5" />
+            <circle cx="12" cy="12" r="1.5" />
+            <circle cx="19" cy="12" r="1.5" />
+          </svg>
         </button>
       </div>
 
@@ -123,9 +133,8 @@ export function MessageArea() {
         )}
 
         <TypingIndicator visible={typing} />
+        <div ref={bottomRef} />
       </div>
-
-      <div className="chat-context-banner">Contexte actuel: Decontracte</div>
 
       {activeThread ? <MessageInput /> : null}
     </section>

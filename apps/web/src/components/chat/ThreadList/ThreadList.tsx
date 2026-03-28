@@ -9,7 +9,7 @@ import { EmptyState } from '../../ui/EmptyState';
 type FilterKey = 'all' | 'unread' | 'favorites' | 'groups';
 
 export function ThreadList() {
-  const { threads } = useMessages();
+  const { threads, isLoadingThreads, threadsError } = useMessages();
   const { pathname, navigate } = useRoute();
   const [query, setQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
@@ -80,7 +80,21 @@ export function ThreadList() {
       </div>
 
       <div className="thread-list-scroll">
-        {filtered.length === 0 ? (
+        {isLoadingThreads ? (
+          <div className="thread-empty-shell">
+            <EmptyState
+              title="Chargement..."
+              description="Recuperation des conversations en cours."
+            />
+          </div>
+        ) : threadsError ? (
+          <div className="thread-empty-shell">
+            <EmptyState
+              title="Erreur de chargement"
+              description={threadsError}
+            />
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="thread-empty-shell">
             <EmptyState
               title="Aucune conversation"

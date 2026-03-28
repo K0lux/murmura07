@@ -83,11 +83,13 @@ export function Sidebar() {
   const { user } = useAuth();
   const { unreadAlerts } = useNotifications();
   const { pathname, navigate } = useRoute();
+  const inSettingsSpace = pathname === '/settings' || (pathname.startsWith('/settings/') && pathname !== '/settings/profile');
   const inMurmuraSpace =
-    pathname === '/intelligence' ||
-    pathname.startsWith('/intelligence/') ||
-    pathname === '/settings/profile' ||
-    pathname === '/profile';
+    !inSettingsSpace &&
+    (pathname === '/intelligence' ||
+      pathname.startsWith('/intelligence/') ||
+      pathname === '/settings/profile' ||
+      pathname === '/profile');
 
   return (
     <aside className="sidebar">

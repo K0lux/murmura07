@@ -98,8 +98,7 @@ export function ThreadItem({
       onClick={() => onSelect(thread.id)}
     >
       <div className="thread-card-avatar">
-        <Avatar name={thread.name} size="lg" />
-        <span className="thread-presence-dot" />
+        <Avatar name={thread.name} size="md" />
       </div>
 
       <div className="thread-card-body">
