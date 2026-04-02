@@ -48,7 +48,7 @@ export class DecisionOrchestrationAgent {
       };
     }
 
-    await this.persister.persist(input.userId, decision);
+    void this.persister.persist(input.userId, decision).catch(() => undefined);
     return decision;
   }
 }

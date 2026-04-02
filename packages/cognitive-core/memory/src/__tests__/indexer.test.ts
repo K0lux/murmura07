@@ -18,12 +18,12 @@ class FakeWatcher {
 }
 
 class FakeEngine {
-  indexed: Array<{ workspace: string; filePath: string; source: string }> = [];
+  indexed: Array<{ userId: string; workspace: string; filePath: string; source: string }> = [];
   rebuildCalled = false;
   rebuildUserId: string | null = null;
 
-  async indexFile(workspace: string, filePath: string, source: string) {
-    this.indexed.push({ workspace, filePath, source });
+  async indexFile(userId: string, workspace: string, filePath: string, source: string) {
+    this.indexed.push({ userId, workspace, filePath, source });
   }
 
   async rebuildIndex(userId: string) {
@@ -46,6 +46,7 @@ describe('MemoryIndexer', () => {
 
     expect(engine.rebuildCalled).toBe(true);
     expect(engine.rebuildUserId).toBe('user1');
+    expect(engine.indexed[0]?.userId).toBe('user1');
     expect(engine.indexed[0]?.filePath).toContain('MEMORY.md');
     expect(engine.indexed[0]?.source).toBe('memory');
   });
@@ -94,6 +95,22 @@ describe('MemoryIndexer', () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(changedFiles).toEqual(['C:/workspace/relationships/marc.md']);
+  });
+
+  it('ignores repeated starts for the same user', async () => {
+    const engine = new FakeEngine();
+    const watcher = new FakeWatcher();
+    const indexer = new MemoryIndexer(engine as never, watcher as never);
+
+    indexer.start('user1', 'C:/workspace');
+    indexer.start('user1', 'C:/workspace');
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    watcher.emit('C:/workspace/MEMORY.md');
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(engine.rebuildCalled).toBe(true);
+    expect(engine.indexed).toHaveLength(1);
   });
 });
 

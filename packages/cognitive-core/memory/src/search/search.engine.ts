@@ -3,7 +3,7 @@ import path from 'node:path';
 import { MemorySearchResult } from '@murmura/cognitive-core-shared';
 import { WorkspaceManager } from '../workspace/workspace.manager.js';
 import { Chunk, chunkMarkdown } from './chunker.js';
-import { createIndexState, hashContent } from './index.state.js';
+import { IndexState, createIndexState, hashContent } from './index.state.js';
 import { mergeHybridScores } from './hybrid.merger.js';
 import { selectEmbeddingProvider } from '../embeddings/provider.selector.js';
 
@@ -21,12 +21,16 @@ interface SearchOptions {
   sources?: Array<'memory' | 'session'>;
 }
 
+interface UserIndexState {
+  index: DocumentIndex[];
+  docFreq: Map<string, number>;
+  totalDocs: number;
+  fileChunks: Map<string, Chunk[]>;
+  indexState: IndexState;
+}
+
 export class MemorySearchEngine {
-  private index: DocumentIndex[] = [];
-  private docFreq = new Map<string, number>();
-  private totalDocs = 0;
-  private fileChunks = new Map<string, Chunk[]>();
-  private indexState = createIndexState();
+  private readonly userStates = new Map<string, UserIndexState>();
   private embeddingProvider = selectEmbeddingProvider();
 
   constructor(private readonly workspaceManager = new WorkspaceManager()) {}
@@ -34,27 +38,34 @@ export class MemorySearchEngine {
   async rebuildIndex(userId: string): Promise<void> {
     const workspacePath = await this.workspaceManager.ensureWorkspace(userId);
     const files = await this.collectFiles(workspacePath);
+    const state = this.resetUserState(userId);
 
     for (const file of files) {
-      await this.indexFile(workspacePath, file.filePath, file.sourceType);
+      await this.indexFile(userId, workspacePath, file.filePath, file.sourceType);
     }
 
-    this.rebuildScores();
-    this.indexState.lastIndexedAt = new Date();
+    this.rebuildScores(state);
+    state.indexState.lastIndexedAt = new Date();
   }
 
-  async indexFile(workspacePath: string, filePath: string, sourceType: 'memory' | 'session') {
+  async indexFile(
+    userId: string,
+    workspacePath: string,
+    filePath: string,
+    sourceType: 'memory' | 'session'
+  ) {
+    const state = this.getUserState(userId);
     const content = await fs.readFile(filePath, 'utf8');
     const contentHash = hashContent(content);
-    const previousHash = this.indexState.fileHashes.get(filePath);
+    const previousHash = state.indexState.fileHashes.get(filePath);
 
     if (previousHash && previousHash === contentHash) {
       return;
     }
 
     const chunks = chunkMarkdown(filePath, content);
-    this.fileChunks.set(filePath, chunks);
-    this.indexState.fileHashes.set(filePath, contentHash);
+    state.fileChunks.set(filePath, chunks);
+    state.indexState.fileHashes.set(filePath, contentHash);
 
     const embeddings = await this.embeddingProvider.embedBatch(chunks.map((chunk) => chunk.content));
 
@@ -70,14 +81,17 @@ export class MemorySearchEngine {
       };
     });
 
-    this.index = this.index.filter((entry) => entry.chunk.filePath !== filePath).concat(chunkEntries);
+    state.index = state.index.filter((entry) => entry.chunk.filePath !== filePath).concat(chunkEntries);
+    this.rebuildScores(state);
   }
 
   async search(userId: string, query: string, options: SearchOptions = {}): Promise<MemorySearchResult[]> {
-    if (!this.index.length) {
-      await this.rebuildIndex(userId);
+    const state = this.getUserState(userId);
+    if (!state.index.length) {
+      return [];
     }
 
+    const currentState = this.getUserState(userId);
     const tokens = this.tokenize(query);
     if (!tokens.length) {
       return [];
@@ -85,10 +99,10 @@ export class MemorySearchEngine {
 
     const vector = await this.embeddingProvider.embed(query);
 
-    const scores = this.index
+    const scores = currentState.index
       .filter((entry) => (options.sources ? options.sources.includes(entry.sourceType) : true))
       .map((entry) => {
-        const bm25Score = this.bm25Score(entry, tokens);
+        const bm25Score = this.bm25Score(currentState, entry, tokens);
         const vectorScore = this.cosineSimilarity(vector, entry.embedding);
         return { chunk: entry.chunk, bm25Score, vectorScore, combinedScore: 0 };
       });
@@ -97,15 +111,46 @@ export class MemorySearchEngine {
       .filter((score) => score.combinedScore > 0)
       .slice(0, options.limit ?? 6);
 
-    return merged.map((score) => this.toResult(score.chunk, query, score.combinedScore, score.chunk.filePath));
+    return merged.map((score) =>
+      this.toResult(score.chunk, query, score.combinedScore, score.chunk.filePath)
+    );
   }
 
-  private rebuildScores() {
-    this.totalDocs = this.index.length;
-    this.docFreq = new Map();
-    for (const entry of this.index) {
+  private getUserState(userId: string) {
+    const existing = this.userStates.get(userId);
+    if (existing) {
+      return existing;
+    }
+
+    const created: UserIndexState = {
+      index: [],
+      docFreq: new Map(),
+      totalDocs: 0,
+      fileChunks: new Map(),
+      indexState: createIndexState()
+    };
+    this.userStates.set(userId, created);
+    return created;
+  }
+
+  private resetUserState(userId: string) {
+    const reset: UserIndexState = {
+      index: [],
+      docFreq: new Map(),
+      totalDocs: 0,
+      fileChunks: new Map(),
+      indexState: createIndexState()
+    };
+    this.userStates.set(userId, reset);
+    return reset;
+  }
+
+  private rebuildScores(state: UserIndexState) {
+    state.totalDocs = state.index.length;
+    state.docFreq = new Map();
+    for (const entry of state.index) {
       for (const token of new Set(entry.tokens)) {
-        this.docFreq.set(token, (this.docFreq.get(token) ?? 0) + 1);
+        state.docFreq.set(token, (state.docFreq.get(token) ?? 0) + 1);
       }
     }
   }
@@ -161,10 +206,11 @@ export class MemorySearchEngine {
     return freq;
   }
 
-  private bm25Score(entry: DocumentIndex, queryTokens: string[]): number {
+  private bm25Score(state: UserIndexState, entry: DocumentIndex, queryTokens: string[]): number {
     const k1 = 1.5;
     const b = 0.75;
-    const avgDocLen = this.index.reduce((sum, d) => sum + d.tokens.length, 0) / Math.max(1, this.totalDocs);
+    const avgDocLen =
+      state.index.reduce((sum, document) => sum + document.tokens.length, 0) / Math.max(1, state.totalDocs);
     const docLen = entry.tokens.length || 1;
 
     let score = 0;
@@ -173,8 +219,8 @@ export class MemorySearchEngine {
       if (!tf) {
         continue;
       }
-      const df = this.docFreq.get(token) ?? 0;
-      const idf = Math.log(1 + (this.totalDocs - df + 0.5) / (df + 0.5));
+      const df = state.docFreq.get(token) ?? 0;
+      const idf = Math.log(1 + (state.totalDocs - df + 0.5) / (df + 0.5));
       const denom = tf + k1 * (1 - b + b * (docLen / avgDocLen));
       score += idf * ((tf * (k1 + 1)) / denom);
     }
@@ -229,4 +275,3 @@ export class MemorySearchEngine {
     return { snippet: content.slice(start, end) };
   }
 }
-

@@ -26,7 +26,12 @@ export class GovernanceAgent {
 
       if (allViolations.length) {
         this.logger.log(userId, decision, allViolations);
-        return { allowed: false, violations: allViolations, blockedReason: 'guardrail' };
+        const blockingViolations = allViolations.filter((violation) => violation.severity === 'block');
+        if (blockingViolations.length) {
+          return { allowed: false, violations: allViolations, blockedReason: 'guardrail' };
+        }
+
+        return { allowed: true, violations: allViolations };
       }
 
       return { allowed: true, violations: [] };

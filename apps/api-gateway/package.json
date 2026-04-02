@@ -10,8 +10,8 @@
     "test": "vitest run --config vitest.config.ts",
     "test:unit": "vitest run --config vitest.config.ts --project unit",
     "test:api": "vitest run --config vitest.config.ts --project api",
-    "test:security": "vitest run --config vitest.config.ts --project security",
-    "test:performance": "vitest run --config vitest.config.ts --project performance",
+    "test:security": "vitest run --config test/security/vitest.config.ts",
+    "test:performance": "vitest run --config test/performance/vitest.config.ts",
     "test:e2e": "cross-env RUN_INTEGRATION=1 vitest run --config test/e2e/vitest.config.ts",
     "test:integration": "cross-env RUN_INTEGRATION=1 vitest run --config test/vitest.config.ts"
   },

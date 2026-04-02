@@ -30,6 +30,7 @@ export class CognitiveService {
   private readonly orchestrator = new PipelineOrchestrator();
   private readonly indexer = new MemoryIndexer(this.memorySearch);
   private indexedUsers = new Set<string>();
+  private indexingUsers = new Set<string>();
 
   private identityStore = new Map<string, IdentityModel>();
   private relationshipStore = new Map<string, RelationshipNode[]>();
@@ -38,11 +39,18 @@ export class CognitiveService {
     this.ensureIndexing(message.userId);
 
     const analysis = await this.ingestion.process(message);
+    const strategy =
+      analysis.ambiguityScore >= 0.55
+        ? 'ask_clarification'
+        : analysis.tensionScore > 0.6
+          ? 'respond_diplomatic'
+          : 'respond_direct';
 
     const recommendation: Recommendation = {
-      strategy: analysis.tensionScore > 0.6 ? 'respond_diplomatic' : 'respond_direct',
-      rationale: analysis.tensionScore > 0.6 ? 'Préserver la relation sous tension.' : 'Réponse directe suffisante.',
-      confidence: 0.6
+      strategy,
+      rationale: this.buildRecommendationRationale(strategy, analysis),
+      confidence: this.buildRecommendationConfidence(analysis),
+      suggestedReply: this.buildSuggestedReply(message, analysis, strategy)
     };
 
     const alerts: Alert[] = [];
@@ -50,7 +58,7 @@ export class CognitiveService {
       alerts.push({
         type: 'high_tension',
         severity: 'warning',
-        message: 'Tension élevée détectée.',
+        message: 'Tension elevee detectee.',
         triggeredBy: 'tensionScore'
       });
     }
@@ -190,16 +198,82 @@ export class CognitiveService {
   }
 
   private ensureIndexing(userId: string) {
-    if (this.indexedUsers.has(userId)) {
+    if (this.indexedUsers.has(userId) || this.indexingUsers.has(userId)) {
       return;
     }
 
-    void this.workspaceManager.ensureWorkspace(userId).then((workspacePath) => {
-      this.indexer.start(userId, workspacePath, () => {
-        this.contextEngine.notifyWorkspaceChanged(userId);
+    this.indexingUsers.add(userId);
+    void this.workspaceManager
+      .ensureWorkspace(userId)
+      .then(() => {
+        // Keep request paths lightweight. Full indexing is rebuilt lazily by memory
+        // search instead of starting file watchers during interactive API requests.
+        this.indexedUsers.add(userId);
+      })
+      .finally(() => {
+        this.indexingUsers.delete(userId);
       });
-      this.indexedUsers.add(userId);
-    });
+  }
+
+  private buildRecommendationRationale(
+    strategy: Recommendation['strategy'],
+    analysis: ReturnType<typeof MessageAnalysisSchema.parse>
+  ) {
+    switch (strategy) {
+      case 'ask_clarification':
+        return 'Clarifier la demande avant de proposer une action.';
+      case 'respond_diplomatic':
+        return 'Preserver la relation avec une reponse calme et nuancee.';
+      default:
+        return analysis.tensionScore > 0.45
+          ? 'Repondre simplement tout en gardant un ton rassurant.'
+          : 'Une reponse claire et directe suffit dans ce contexte.';
+    }
+  }
+
+  private buildRecommendationConfidence(analysis: ReturnType<typeof MessageAnalysisSchema.parse>) {
+    const ambiguityPenalty = analysis.ambiguityScore * 0.2;
+    const tensionPenalty = analysis.tensionScore > 0.7 ? 0.1 : 0;
+    return Math.max(0.45, Math.min(0.85, 0.72 - ambiguityPenalty - tensionPenalty));
+  }
+
+  private buildSuggestedReply(
+    message: RawMessage,
+    analysis: ReturnType<typeof MessageAnalysisSchema.parse>,
+    strategy: Recommendation['strategy']
+  ) {
+    const greeting = this.pickGreeting(message.content);
+    const opening =
+      analysis.emotion.dominant === 'pressure' || analysis.tensionScore >= 0.6
+        ? "Merci pour ton message. Je comprends qu'il faut clarifier cela rapidement."
+        : 'Merci pour ton message.';
+
+    const clarification =
+      strategy === 'ask_clarification'
+        ? "Pour te repondre utilement, peux-tu me dire quel point est prioritaire a traiter en premier ?"
+        : this.buildActionSentence(analysis);
+
+    const closing =
+      analysis.urgencyLevel === 'high' || analysis.urgencyLevel === 'critical'
+        ? 'Je peux te confirmer le plan final tres vite ensuite.'
+        : 'Dis-moi si tu veux que je detaille un point en particulier.';
+
+    return [greeting, opening, clarification, closing].join(' ').trim();
+  }
+
+  private buildActionSentence(analysis: ReturnType<typeof MessageAnalysisSchema.parse>) {
+    if (analysis.implicitDemand) {
+      return `Voici ce que je propose pour avancer: ${analysis.implicitDemand.toLowerCase()}.`;
+    }
+
+    return `Je te propose de commencer par ${analysis.explicitDemand.toLowerCase()}.`;
+  }
+
+  private pickGreeting(content: string) {
+    const normalized = content.trim().toLowerCase();
+    if (normalized.startsWith('bonsoir')) {
+      return 'Bonsoir,';
+    }
+    return 'Bonjour,';
   }
 }
-

@@ -43,7 +43,7 @@ describe('GovernanceAgent', () => {
     expect(logger.log).toHaveBeenCalledTimes(1);
   });
 
-  it('merges soft-rule and guardrail violations and blocks the decision', async () => {
+  it('keeps warnings visible but only blocks when a blocking violation exists', async () => {
     const logger = { log: vi.fn() };
     const softViolation: Violation = {
       rule: { id: 'avoid_late_messages', description: 'Avoid late messages', category: 'soft' },
@@ -68,6 +68,29 @@ describe('GovernanceAgent', () => {
     expect(result.allowed).toBe(false);
     expect(result.blockedReason).toBe('guardrail');
     expect(result.violations).toEqual([softViolation, guardrailViolation]);
+    expect(logger.log).toHaveBeenCalledTimes(1);
+  });
+
+  it('allows the decision when governance only finds warnings', async () => {
+    const logger = { log: vi.fn() };
+    const softViolation: Violation = {
+      rule: { id: 'avoid_late_messages', description: 'Avoid late messages', category: 'soft' },
+      severity: 'warning',
+      description: 'Late-night sending window.'
+    };
+
+    const agent = new GovernanceAgent(
+      { evaluate: () => [] } as never,
+      { evaluate: vi.fn(async () => [softViolation]) } as never,
+      { evaluate: vi.fn(async () => []) } as never,
+      logger as never
+    );
+
+    const result = await agent.check(decision, 'user1');
+
+    expect(result.allowed).toBe(true);
+    expect(result.blockedReason).toBeUndefined();
+    expect(result.violations).toEqual([softViolation]);
     expect(logger.log).toHaveBeenCalledTimes(1);
   });
 

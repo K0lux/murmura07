@@ -47,7 +47,7 @@ describe('Security protections', () => {
     expect(response.json()).toMatchObject({
       error: {
         statusCode: 401,
-        message: 'Authentication required'
+        message: 'Missing Authorization header'
       }
     });
   });
