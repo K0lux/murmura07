@@ -263,4 +263,60 @@ describeIntegration('Fastify + Prisma + Redis integration', () => {
 
     expect(loggedOutRefresh.statusCode).toBe(401);
   }, 180000);
+
+  it('enforces unique database constraints for users and refresh tokens', async () => {
+    if (!app) {
+      return;
+    }
+
+    const healthResponse = await app.inject({
+      method: 'GET',
+      url: '/health'
+    });
+    const healthBody = healthResponse.json() as { status: 'healthy' | 'degraded' };
+    if (healthResponse.statusCode !== 200 || healthBody.status !== 'healthy') {
+      return;
+    }
+
+    const prisma = app.get(PrismaService);
+
+    const createdUser = await prisma.user.create({
+      data: {
+        email: 'db-constraints@example.com',
+        passwordHash: 'hash',
+        passwordSalt: 'salt',
+        phoneNumber: '+22899000001'
+      }
+    });
+
+    await expect(
+      prisma.user.create({
+        data: {
+          email: 'db-constraints@example.com',
+          passwordHash: 'hash-2',
+          passwordSalt: 'salt-2'
+        }
+      })
+    ).rejects.toThrow();
+
+    const refreshToken = await prisma.refreshToken.create({
+      data: {
+        userId: createdUser.id,
+        token: 'db-refresh-token-1',
+        expiresAt: new Date(Date.now() + 60_000)
+      }
+    });
+
+    expect(refreshToken.userId).toBe(createdUser.id);
+
+    await expect(
+      prisma.refreshToken.create({
+        data: {
+          userId: createdUser.id,
+          token: 'db-refresh-token-1',
+          expiresAt: new Date(Date.now() + 120_000)
+        }
+      })
+    ).rejects.toThrow();
+  }, 180000);
 });
