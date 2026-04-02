@@ -1,24 +1,24 @@
 :root {
   color-scheme: light;
-  --bg: #f2f1ef;
-  --bg-ambient: #eceae7;
+  --bg: #f5f3ff;
+  --bg-ambient: #ede9fe;
   --bg-panel: rgba(255, 255, 255, 0.9);
   --bg-strong: #ffffff;
-  --bg-soft: #f7f5ff;
-  --text: #17191f;
-  --muted: #6d7385;
-  --line: rgba(33, 39, 55, 0.1);
-  --line-strong: rgba(33, 39, 55, 0.18);
-  --primary: #6d56e8;
-  --primary-soft: #ede8ff;
-  --primary-strong: #8a6cf6;
-  --success: #22c55e;
-  --success-soft: #edf9f0;
+  --bg-soft: #f5f3ff;
+  --text: #111827;
+  --muted: #6b7280;
+  --line: rgba(17, 24, 39, 0.1);
+  --line-strong: rgba(17, 24, 39, 0.18);
+  --primary: #7c3aed;
+  --primary-soft: #ede9fe;
+  --primary-strong: #3730a3;
+  --success: #10b981;
+  --success-soft: rgba(16, 185, 129, 0.1);
   --danger: #db4b4b;
   --warning: #c88b1c;
-  --shadow: 0 24px 60px rgba(46, 50, 77, 0.08);
-  --sidebar-shadow: 0 20px 45px rgba(35, 41, 69, 0.12);
-  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  --shadow: 0 24px 60px rgba(17, 24, 39, 0.1);
+  --sidebar-shadow: 0 20px 45px rgba(67, 56, 202, 0.14);
+  font-family: "Poppins", "Segoe UI", sans-serif;
 }
 
 * {
@@ -35,9 +35,9 @@ body,
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 22%),
-    radial-gradient(circle at bottom right, rgba(109, 86, 232, 0.1), transparent 22%),
-    linear-gradient(180deg, #f6f5f3 0%, #ece9e3 100%);
+    radial-gradient(circle at top left, rgba(124, 58, 237, 0.14), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.1), transparent 24%),
+    linear-gradient(180deg, #fcfbff 0%, #f5f3ff 52%, #ede9fe 100%);
   color: var(--text);
 }
 
@@ -156,12 +156,17 @@ select {
 }
 
 .sidebar-brand-mark {
-  background: linear-gradient(180deg, #22c55e 0%, #1fb455 100%);
+  background: none;
 }
 
 .sidebar-profile-avatar {
   border-radius: 999px;
-  background: linear-gradient(180deg, #c3cde4 0%, #9ca9c8 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #3730a3 100%);
+}
+
+.sidebar-brand-mark svg {
+  width: 36px;
+  height: 34px;
 }
 
 .sidebar-icon-glyph {
@@ -1058,8 +1063,35 @@ select {
   padding: 32px;
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, 0.82);
-  background: rgba(255, 255, 255, 0.88);
+  background:
+    radial-gradient(circle at top right, rgba(16, 185, 129, 0.09), transparent 24%),
+    linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(255, 255, 255, 0.96) 56%);
   box-shadow: var(--shadow);
+}
+
+.auth-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.auth-brand-mark {
+  width: 60px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+}
+
+.auth-brand-mark svg {
+  width: 60px;
+  height: 56px;
+}
+
+.auth-brand-title {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-strong);
+  font-size: 0.82rem;
 }
 
 .input-group {

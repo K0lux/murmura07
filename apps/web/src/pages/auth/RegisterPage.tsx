@@ -39,7 +39,7 @@ export function RegisterPage() {
         placeholder="Direct, empathique, concis..."
         value={style}
         onChange={(event) => setStyle(event.target.value)}
-        error={error ?? undefined}
+        {...(error ? { error } : {})}
       />
       <Button
         loading={loading}
@@ -50,8 +50,8 @@ export function RegisterPage() {
             await register({
               email,
               password,
-              firstName: displayName || undefined,
-              preferredCommunicationStyle: style || undefined
+              ...(displayName.trim() ? { firstName: displayName.trim() } : {}),
+              ...(style.trim() ? { preferredCommunicationStyle: style.trim() } : {})
             });
           } catch (registerError) {
             setError(registerError instanceof Error ? registerError.message : 'Inscription impossible');

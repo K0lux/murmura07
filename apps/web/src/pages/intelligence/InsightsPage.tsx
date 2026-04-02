@@ -31,6 +31,15 @@ export function InsightsPage() {
   )[0];
   const strongest = [...relationships].sort((left, right) => right.healthScore - left.healthScore)[0];
 
+  if (!mostTense || !strongest) {
+    return (
+      <EmptyState
+        title="Insights indisponibles"
+        description="Les signaux relationnels ne sont pas encore assez complets pour generer un resume."
+      />
+    );
+  }
+
   return (
     <div className="stack">
       <InsightCard

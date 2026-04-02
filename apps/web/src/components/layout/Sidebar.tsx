@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { BrandMark } from '../branding/BrandMark';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../hooks/useNotifications';
 import { useRoute } from '../../utils/router';
@@ -33,11 +34,7 @@ function MessageIcon() {
 }
 
 function MurmuraIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 3.5 14.7 9l5.8.8-4.2 4.1 1 5.8L12 17l-5.3 2.7 1-5.8L3.5 9.8 9.3 9 12 3.5Z" />
-    </svg>
-  );
+  return <BrandMark title="Espace Murmura" />;
 }
 
 function SettingsIcon() {
@@ -102,7 +99,9 @@ export function Sidebar() {
             title="Murmura"
             aria-label="Murmura"
           >
-            <span className="sidebar-brand-mark">M</span>
+            <span className="sidebar-brand-mark">
+              <BrandMark />
+            </span>
           </button>
         </div>
 

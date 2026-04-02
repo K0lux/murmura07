@@ -1,7 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <rect width="192" height="192" rx="48" fill="#0a7b61" />
-  <path d="M48 58h96a26 26 0 0 1 26 26v28a26 26 0 0 1-26 26H95l-35 26v-26H48a26 26 0 0 1-26-26V84a26 26 0 0 1 26-26Z" fill="#f7fbf8"/>
-  <circle cx="75" cy="98" r="9" fill="#0a7b61"/>
-  <circle cx="96" cy="98" r="9" fill="#0a7b61"/>
-  <circle cx="117" cy="98" r="9" fill="#0a7b61"/>
+  <defs>
+    <linearGradient id="murmura-icon-192-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED" />
+      <stop offset="100%" stop-color="#3730A3" />
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="48" fill="url(#murmura-icon-192-gradient)" />
+  <path d="M42 30h108c16.569 0 30 13.431 30 30v56c0 16.569-13.431 30-30 30H82l-28 28 12-28H42c-16.569 0-30-13.431-30-30V60c0-16.569 13.431-30 30-30Z" fill="rgba(255,255,255,0.16)" />
+  <path d="M42 74c17-12 31-12 46 0s35 12 54 0" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8" opacity=".4" />
+  <path d="M42 96c17-12 31-12 46 0s35 12 54 0" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8" opacity=".7" />
+  <path d="M42 118c17-12 31-12 46 0s35 12 54 0" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8" />
 </svg>

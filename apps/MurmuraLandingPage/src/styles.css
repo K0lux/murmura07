@@ -110,7 +110,11 @@ button, input, textarea, select { font: inherit; }
 }
 .brand-mark svg { width: 38px; height: 38px; }
 .brand-copy { display: grid; gap: 3px; }
-.brand-copy strong { font-size: 1.02rem; letter-spacing: -0.02em; }
+.brand-copy strong {
+  font-size: 1.18rem;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+}
 .brand-copy span,
 .hero-lead,
 .section-heading p,

@@ -15,12 +15,12 @@ function parseCognitivePayload(value: ApiMessage['analysisJson']): StoredCogniti
     return null;
   }
 
-  if (!('analysis' in value) || typeof value.analysis !== 'object') {
+  if (!('analysis' in value) || typeof value['analysis'] !== 'object') {
     return null;
   }
 
   const payload = value as Partial<StoredCognitivePayload>;
-  const maybeAnalysis = payload.analysis as Partial<ApiAnalysis>;
+  const maybeAnalysis = payload['analysis'] as Partial<ApiAnalysis>;
   if (
     typeof maybeAnalysis.intention !== 'string' ||
     typeof maybeAnalysis.tensionScore !== 'number' ||

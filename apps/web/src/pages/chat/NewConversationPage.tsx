@@ -26,7 +26,7 @@ export function NewConversationPage({ embedded = false }: { embedded?: boolean }
         placeholder="Numero, email ou identifiant principal"
         value={interlocuteurId}
         onChange={(event) => setInterlocuteurId(event.target.value)}
-        error={error ?? undefined}
+        {...(error ? { error } : {})}
       />
 
       <Input
@@ -53,7 +53,7 @@ export function NewConversationPage({ embedded = false }: { embedded?: boolean }
           try {
             const thread = await createThread({
               interlocuteurId: interlocuteurId.trim(),
-              subject: subject.trim() || undefined
+              ...(subject.trim() ? { subject: subject.trim() } : {})
             });
             navigate(`/chat/thread/${thread.id}`);
             setTimeout(() => notifyMessagesRefresh(), 50);

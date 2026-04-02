@@ -1,9 +1,9 @@
 {
   "name": "Murmura",
   "short_name": "Murmura",
-  "description": "Messagerie relationnelle type WhatsApp en MVP web et mobile",
-  "theme_color": "#0a7b61",
-  "background_color": "#efeae2",
+  "description": "Messagerie privee augmentee avec memoire relationnelle et intelligence contextuelle",
+  "theme_color": "#7c3aed",
+  "background_color": "#f5f3ff",
   "display": "standalone",
   "orientation": "portrait-primary",
   "start_url": "/chat",

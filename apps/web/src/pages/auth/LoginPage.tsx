@@ -27,7 +27,7 @@ export function LoginPage() {
         placeholder="mot de passe"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
-        error={error ?? undefined}
+        {...(error ? { error } : {})}
       />
       <Button
         loading={loading}
